@@ -1,0 +1,156 @@
+FORMAT: 1A
+HOST: https://affiliate.api.diablomedia.com/v1
+
+# Diablo Publisher API V1
+
+API for publishers of Diablo tracking system.
+
+# API Root [/]
+
+Nothing to see here?
+
+## Retrieve the Entry Point [GET]
+
++ Response 404 (application/hal+json)
+
+        {
+            
+        }
+
+# Group Campaigns
+
+## Campaign Resource [/campaign/{campaign_id}/{?publisher_id}]
+
++ Attributes (Campaign Full)
+
++ Parameters
+    + campaign_id: 1 (required, number) - ID of the Campaign in form of an integer
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
+### View a Campaign Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Campaign Full)
+
+## Campaigns Collection [/campaigns/{?category,country,page,payout_type,publisher_id,sort,traffic_type,type,visibility}]
+
+Paged listing of all campaigns available, can be filtered by various campaign properties.
+
++ Parameters
+    + category: test (optional, string) - The slug of a category (or categories separated by commas) to filter the results by
+    + country: US (optional, string) - The "code" of a country (or several countries, separated by commas) to filter by
+    + page: 1 (optional, number) - The page of campaigns to return
+    + payout_type: cpa (optional, string) - Filter the results by campaign payout type (available options: "cpa", "cpc", "revshare"), separate several options with a comma
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+    + sort: name (optional, string) - Sort the results by this field, prepend with a dash (-) to reverse the sort direction
+    + traffic_type: email (optional, string) - Filter the results by campaign traffic type slug (separate by a comma to filter by multiple traffic types)
+    + type: standard (optional, string) - Filter the results by campaign type (available options: "standard", "paypercall" or "coreg"), separate several options with a comma
+    + visibility: all (optional, string) - Filter the results by visibility (must be one of "all", "approved", "unapproved", "pending", "running")
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/campaigns?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/campaigns (string)
+            + last: https://affiliate.api.diablomedia.com/v1/campaigns?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/campaigns?page=2 (string)
+    + `_embedded` (array[Campaign Lite])
+
+### View Campaign List [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Campaigns Collection)
+
+# Group Creatives
+
+## Creative Resource [/creative/{creative_id}/{?publisher_id}]
+
++ Attributes (Creative Full)
+
++ Parameters
+    + creative_id: 1 (required, number) - ID of the Creative in form of an integer
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
+### View a Creative Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Creative Full)
+
+## Creatives Collection [/creatives/{?campaign,page,publisher_id,sort}]
+
++ Parameters
+    + campaign: 1 (optional, number) - Filter creatives by campaign id that they are attached to
+    + page: 1 (optional, number) - The page of campaigns to return
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+    + sort: id (optional, string) - Sort the results by this field, prepend with a dash (-) to reverse the sort direction
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/creatives?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/creatives (string)
+            + last: https://affiliate.api.diablomedia.com/v1/creatives?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/creatives?page=2 (string)
+    + `_embedded` (array[Creative Lite])
+
+### View Creative List [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Creatives Collection)
+
+# Data Structures
+
+## Campaign Minimal (object)
++ id: 1 (number) - Campaign's Id
++ name: Campaign Name (string) - Campaign's Name
++ status: active (string) Campaign's Status ("active", "inactive")
++ thumbnail (string) URL to campaign's thumbnail image
+
+## Campaign Lite (Campaign Minimal)
++ `approval_status`: approved (string) - Approval Status of campaign ['approved','pending','denied','not_approved']
++ categories: [] (array) - Array of category objects
++ created: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when the campaign was created
++ description (string) - Campaign description, may contain HTML
++ epc: 1.00 (number) - Publisher's EPC for this campaign
++ payout: 5.00 (number) - The payout amount for this campaign (dollar amount for CPA/CPC campaigns, percentage for RevShare)
++ payout_type: CPA (string) - The payout type of the campaign (CPA, CPC, RevShare)
++ traffic_types: [] (array) - Array of traffic type objects
++ type: Standard (string) - Type of campaign (Standard, PayPerCall, CoReg)
++ url: https://test.com (string) - URL of the offer's home page
+
+## Campaign Full (Campaign Lite)
++ `_embedded` (object)
+    + creatives (array[Creative Minimal]) - Low density view of Campaign's creatives
+    + pixels: [] (array) - Low density view of Campaign's third party pixels for this publisher
++ countries: [] (array) - Array of country objects
++ coreg: {} (object) - If campaign is CoReg type, this will contain posting fields and instructions
++ `from_lines`: [] (array) - Array of approved Email "from" lines
++ `phone_number_limit`: 5 (number) - The limit of static phone numbers this publisher is allowed to have on this campaign (PayPerCall only)
++ `phone_numbers`: [] (array) - Phone numbers this publisher has created for this campaign (PayPerCall only)
++ `pixel_type`: cookie (string) - The pixel type this campaign uses (either "cookie" or "server_to_server")
++ `subject_lines`: [] (array) - Array of approved Email Subject Lines for this campaign
++ suppression (object)
+    + `last_download`: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when the suppression file was last downloaded by this publisher
+    + `last_upload`: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when a new suppression file was last uploaded
+
+## Creative Minimal (object)
++ id: 1 (number) - Creative's Id
++ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the creative was created
++ description: This is the creative's description (string) - Description of the creative
++ type: Basic (string) - They creative's type ("Basic", "Email", "HTML", "Banner")
+
+## Creative Lite (Creative Minimal)
++ `_embedded` (object)
+    + campaign (Campaign Minimal) - The campaign the creative is linked to
++ size: {'width': 468, 'height': 60} (object) - The creative's width and height (Banner and HTML types only)
++ thumbnail (string) - URL to the creative's thumbnail image
++ url (string) - Publisher's URL for this creative (Basic and Banner types only)
+
+## Creative Full (Creative Lite)
++ html (string) The HTML body of the creative (HTML, Banner and Email types only)
++ image (string) URL to the creative's banner image (Banner type only)
++ text (string) Text version of the creative (Email type only)
