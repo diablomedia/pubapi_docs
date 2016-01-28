@@ -102,6 +102,82 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Creatives Collection)
 
+# Group Pixels
+
+## Pixel Resource [/pixel/{pixel_id}/{?publisher_id}]
+
++ Attributes (Pixel Full)
+
++ Parameters
+    + pixel_id: 1 (required, number) - ID of the Pixel to fetch
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
+### View a Pixel Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Pixel Full)
+    
+### Update a Pixel [PATCH]
+
++ Request
+    
+            {
+                "pixel":"http://test.com"
+            }
+        
+
++ Response 200 (application/hal+json)
+    + Attributes (Pixel Full)
+    
+## Pixels Collection [/pixels/{?campaign,global,page,publisher_id,sort,type}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+    
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/pixels?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/pixels (string)
+            + last: https://affiliate.api.diablomedia.com/v1/pixels?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/pixels?page=2 (string)
+    + `_embedded` (array[Pixel Full])
+
+### View Pixel List [GET]
+
++ Parameters
+    + campaign: 1 (optional, number) - Filter the results by campaign id
+    + global: false (optional, boolean) - Filter the results by their global status
+    + page: 1 (optional, number) - The page of campaigns to return
+    + sort: id (optional, string) - Sort the results by this field, prepend with a dash (-) to reverse the sort direction
+    + type: url (optional, string) - Filter the results by pixel type (url or html)
+
++ Response 200 (application/hal+json)
+    + Attributes (Pixels Collection)
+
+### Adding Pixels [POST]
+
++ Request Global Pixel
+    
+            {
+                "pixel":"http://test.com"
+            }
+
++ Response 200 (application/hal+json)
+    + Attributes (Pixel Full Global)
+
++ Request Campaign Pixel
+
+            {
+                "pixel":"http://test.com",
+                "campaign_id":1
+            }
+            
++ Response 200 (application/hal+json)
+    + Attributes (Pixel Full)
+
 # Data Structures
 
 ## Campaign Minimal (object)
@@ -125,7 +201,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Campaign Full (Campaign Lite)
 + `_embedded` (object)
     + creatives (array[Creative Minimal]) - Low density view of Campaign's creatives
-    + pixels: [] (array) - Low density view of Campaign's third party pixels for this publisher
+    + pixels (array[Pixel Minimal]) - Low density view of Campaign's third party pixels for this publisher
 + countries: [] (array) - Array of country objects
 + coreg: {} (object) - If campaign is CoReg type, this will contain posting fields and instructions
 + `from_lines`: [] (array) - Array of approved Email "from" lines
@@ -154,3 +230,21 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + html (string) The HTML body of the creative (HTML, Banner and Email types only)
 + image (string) URL to the creative's banner image (Banner type only)
 + text (string) Text version of the creative (Email type only)
+
+## Pixel Base (object)
++ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the pixel was created
++ id: 1 (number) - Pixel's Id
++ pixel: https://test.com (string) - The content of the pixel (either the URL for "url" types, or the HTML content for "html" types)
++ type: url (string) - The type of the pixel (either "url" or "html")
++ version: 1 (number) - The internal version number of this pixel (updated when pixel is edited)
+
+## Pixel Minimal (Pixel Base)
++ global: false (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
+
+## Pixel Full (Pixel Minimal)
++ `_embedded` (object)
+    + campaign (Campaign Minimal) - The campaign the pixel is linked to
+    
+## Pixel Full Global (Pixel Base)
++ global: true (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
++ `_embedded`: {} (object)
