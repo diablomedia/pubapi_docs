@@ -19,7 +19,7 @@ Nothing to see here?
 
 # Group Campaigns
 
-## Campaign Resource [/campaign/{campaign_id}/{?publisher_id}]
+## Campaign Resource [/campaigns/{campaign_id}/{?publisher_id}]
 
 + Attributes (Campaign Full)
 
@@ -65,7 +65,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 # Group Creatives
 
-## Creative Resource [/creative/{creative_id}/{?publisher_id}]
+## Creative Resource [/creatives/{creative_id}/{?publisher_id}]
 
 + Attributes (Creative Full)
 
@@ -104,7 +104,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 # Group Pixels
 
-## Pixel Resource [/pixel/{pixel_id}/{?publisher_id}]
+## Pixel Resource [/pixels/{pixel_id}/{?publisher_id}]
 
 + Attributes (Pixel Full)
 
@@ -178,15 +178,68 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
 
+# Group Campaign Approvals
+
+## Campaign Approval Resource [/campaign_approvals/{approval_id}/{?publisher_id}]
+
++ Parameters
+    + approval_id: 1 (required, number) - ID of the approval to fetch
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
++ Attributes (Campaign Approval Full)
+
+### View a Campaign Approval Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Campaign Approval Full)
+
+## Campaign Approval Collection [/campaign_approvals/{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+    
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/campaign_approvals (string)
+            + last: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
+    + `_embedded` (array[Campaign Approval Full])
+
+### List Campaign Approvals [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Campaign Approval Collection)
+    
+### Make an Approval Request [POST]
+
++ Request
+
+        {
+            "campaign_id": 1
+        }
+
++ Response 200 (application/hal+json)
+    + Attributes (Campaign Approval Full)
+    
+
 # Data Structures
 
-## Campaign Minimal (object)
+## Campaign Base (object)
 + id: 1 (number) - Campaign's Id
 + name: Campaign Name (string) - Campaign's Name
 + status: active (string) Campaign's Status ("active", "inactive")
 + thumbnail (string) URL to campaign's thumbnail image
 
-## Campaign Lite (Campaign Minimal)
+## Campaign Minimal (Campaign Base)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/campaigns/1 (string)
+
+## Campaign Lite Base (Campaign Base)
 + `approval_status`: approved (string) - Approval Status of campaign ['approved','pending','denied','not_approved']
 + categories: [] (array) - Array of category objects
 + created: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when the campaign was created
@@ -198,10 +251,20 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + type: Standard (string) - Type of campaign (Standard, PayPerCall, CoReg)
 + url: https://test.com (string) - URL of the offer's home page
 
-## Campaign Full (Campaign Lite)
+## Campaign Lite (Campaign Lite Base)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/campaigns/1 (string)
+
+## Campaign Full (Campaign Lite Base)
 + `_embedded` (object)
     + creatives (array[Creative Minimal]) - Low density view of Campaign's creatives
     + pixels (array[Pixel Minimal]) - Low density view of Campaign's third party pixels for this publisher
++ `_links` (object)
+    + `creatives_export`
+        + href: https://affiliate.api.diablomedia.com/campaigns/1/creatives_export (string)
+    + suppression
+        + href: https://affiliate.api.diablomedia.com/campaigns/1/suppression (string)
 + countries: [] (array) - Array of country objects
 + coreg: {} (object) - If campaign is CoReg type, this will contain posting fields and instructions
 + `from_lines`: [] (array) - Array of approved Email "from" lines
@@ -214,6 +277,9 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + `last_upload`: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when a new suppression file was last uploaded
 
 ## Creative Minimal (object)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/campaign_approvals/1 (string)
 + id: 1 (number) - Creative's Id
 + created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the creative was created
 + description: This is the creative's description (string) - Description of the creative
@@ -232,9 +298,12 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + text (string) Text version of the creative (Email type only)
 
 ## Pixel Base (object)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/campaign_approvals/1 (string)
 + created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the pixel was created
 + id: 1 (number) - Pixel's Id
-+ pixel: https://test.com (string) - The content of the pixel (either the URL for "url" types, or the HTML content for "html" types)
++ pixel: https://test.com (string, required) - The content of the pixel (either the URL for "url" types, or the HTML content for "html" types)
 + type: url (string) - The type of the pixel (either "url" or "html")
 + version: 1 (number) - The internal version number of this pixel (updated when pixel is edited)
 
@@ -248,3 +317,21 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Pixel Full Global (Pixel Base)
 + global: true (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
 + `_embedded`: {} (object)
+
+## Campaign Approval Minimal (object)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/campaign_approvals/1 (string)
++ id: 1 (number) - Approval Id
++ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the approval was created
++ status: pending (string) - Approval's status (Approved, Pending, Declined, Deleted)
+
+## Campaign Approval Lite (Campaign Approval Minimal)
+
+## Campaign Approval Full (Campaign Approval Minimal)
++ `_embedded` (object)
+    + campaign (Campaign Minimal) - The campaign the approval is for
+
+
+
+
