@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: https://affiliate.api.diablomedia.com/v1
+HOST: https://affiliate.api.diablomedia.com
 
 # Diablo Publisher API V1
 
@@ -11,15 +11,15 @@ Nothing to see here?
 
 ## Retrieve the Entry Point [GET]
 
-+ Response 404 (application/hal+json)
++ Response 404 (application/api-problem+json)
 
         {
-            
+
         }
 
 # Group Campaigns
 
-## Campaign Resource [/campaigns/{campaign_id}/{?publisher_id}]
+## Campaign Resource [/v1/campaigns/{campaign_id}{?publisher_id}]
 
 + Attributes (Campaign Full)
 
@@ -32,7 +32,7 @@ Nothing to see here?
 + Response 200 (application/hal+json)
     + Attributes (Campaign Full)
 
-## Campaigns Collection [/campaigns/{?category,country,page,payout_type,publisher_id,sort,traffic_type,type,visibility}]
+## Campaigns Collection [/v1/campaigns{?category,country,page,payout_type,publisher_id,sort,traffic_type,type,visibility}]
 
 Paged listing of all campaigns available, can be filtered by various campaign properties.
 
@@ -56,7 +56,8 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
             + first: https://affiliate.api.diablomedia.com/v1/campaigns (string)
             + last: https://affiliate.api.diablomedia.com/v1/campaigns?page=2 (string)
             + next: https://affiliate.api.diablomedia.com/v1/campaigns?page=2 (string)
-    + `_embedded` (array[Campaign Lite])
+    + `_embedded` (object)
+        + campaigns (array[Campaign Lite])
 
 ### View Campaign List [GET]
 
@@ -65,7 +66,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 # Group Creatives
 
-## Creative Resource [/creatives/{creative_id}/{?publisher_id}]
+## Creative Resource [/v1/creatives/{creative_id}{?publisher_id}]
 
 + Attributes (Creative Full)
 
@@ -78,7 +79,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Creative Full)
 
-## Creatives Collection [/creatives/{?campaign,page,publisher_id,sort}]
+## Creatives Collection [/v1/creatives{?campaign,page,publisher_id,sort}]
 
 + Parameters
     + campaign: 1 (optional, number) - Filter creatives by campaign id that they are attached to
@@ -95,7 +96,8 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
             + first: https://affiliate.api.diablomedia.com/v1/creatives (string)
             + last: https://affiliate.api.diablomedia.com/v1/creatives?page=2 (string)
             + next: https://affiliate.api.diablomedia.com/v1/creatives?page=2 (string)
-    + `_embedded` (array[Creative Lite])
+    + `_embedded` (object)
+        + creatives (array[Creative Lite])
 
 ### View Creative List [GET]
 
@@ -104,7 +106,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 # Group Pixels
 
-## Pixel Resource [/pixels/{pixel_id}/{?publisher_id}]
+## Pixel Resource [/v1/pixels/{pixel_id}{?publisher_id}]
 
 + Attributes (Pixel Full)
 
@@ -116,24 +118,25 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
-    
+
 ### Update a Pixel [PATCH]
 
-+ Request
-    
++ Request (application/json)
+
             {
-                "pixel":"http://test.com"
+                "pixel": "http://test.com",
+                "version": 1
             }
-        
+
 
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
-    
-## Pixels Collection [/pixels/{?campaign,global,page,publisher_id,sort,type}]
+
+## Pixels Collection [/v1/pixels{?campaign,global,page,publisher_id,sort,type}]
 
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
-    
+
 + Attributes
     + count: 1 (number) - Number of results in this response
     + total: 2 (number) - Total number of results available
@@ -143,7 +146,8 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
             + first: https://affiliate.api.diablomedia.com/v1/pixels (string)
             + last: https://affiliate.api.diablomedia.com/v1/pixels?page=2 (string)
             + next: https://affiliate.api.diablomedia.com/v1/pixels?page=2 (string)
-    + `_embedded` (array[Pixel Full])
+    + `_embedded` (object)
+        + pixels (array[Pixel Full])
 
 ### View Pixel List [GET]
 
@@ -160,7 +164,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ### Adding Pixels [POST]
 
 + Request Global Pixel
-    
+
             {
                 "pixel":"http://test.com"
             }
@@ -174,13 +178,13 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
                 "pixel":"http://test.com",
                 "campaign_id":1
             }
-            
+
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
 
 # Group Campaign Approvals
 
-## Campaign Approval Resource [/campaign_approvals/{approval_id}/{?publisher_id}]
+## Campaign Approval Resource [/v1/campaign_approvals/{approval_id}{?publisher_id}]
 
 + Parameters
     + approval_id: 1 (required, number) - ID of the approval to fetch
@@ -193,11 +197,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Campaign Approval Full)
 
-## Campaign Approval Collection [/campaign_approvals/{?publisher_id}]
+## Campaign Approval Collection [/v1/campaign_approvals{?publisher_id}]
 
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
-    
+
 + Attributes
     + count: 1 (number) - Number of results in this response
     + total: 2 (number) - Total number of results available
@@ -207,24 +211,29 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
             + first: https://affiliate.api.diablomedia.com/v1/campaign_approvals (string)
             + last: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
             + next: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
-    + `_embedded` (array[Campaign Approval Full])
+    + `_embedded` (object)
+        + `campaign_approvals` (array[Campaign Approval Full])
 
 ### List Campaign Approvals [GET]
 
 + Response 200 (application/hal+json)
     + Attributes (Campaign Approval Collection)
-    
+
 ### Make an Approval Request [POST]
 
-+ Request
++ Request (application/json)
 
         {
-            "campaign_id": 1
+            "campaign_id": 2
         }
 
 + Response 200 (application/hal+json)
+    + Headers
+
+            Location: https://affiliate.api.diablomedia.com/v1/campaign_approvals/1/
+
     + Attributes (Campaign Approval Full)
-    
+
 
 # Data Structures
 
@@ -266,15 +275,19 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + suppression
         + href: https://affiliate.api.diablomedia.com/campaigns/1/suppression (string)
 + countries: [] (array) - Array of country objects
-+ coreg: {} (object) - If campaign is CoReg type, this will contain posting fields and instructions
++ coreg: (object, optional) - If campaign is CoReg type, this will contain posting fields and instructions
+    + fields (array)
+    + additional_instructions (string)
+    + posting_url (string)
+    + sample_url (string)
 + `from_lines`: [] (array) - Array of approved Email "from" lines
-+ `phone_number_limit`: 5 (number) - The limit of static phone numbers this publisher is allowed to have on this campaign (PayPerCall only)
-+ `phone_numbers`: [] (array) - Phone numbers this publisher has created for this campaign (PayPerCall only)
++ `phone_number_limit`: 5 (number, optional) - The limit of static phone numbers this publisher is allowed to have on this campaign (PayPerCall only)
++ `phone_numbers`: [] (array, optional) - Phone numbers this publisher has created for this campaign (PayPerCall only)
 + `pixel_type`: cookie (string) - The pixel type this campaign uses (either "cookie" or "server_to_server")
 + `subject_lines`: [] (array) - Array of approved Email Subject Lines for this campaign
 + suppression (object)
-    + `last_download`: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when the suppression file was last downloaded by this publisher
-    + `last_upload`: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when a new suppression file was last uploaded
+    + `last_download`: `2010-11-05T16:01:54+00:00` (string, nullable) - An ISO8601 date when the suppression file was last downloaded by this publisher
+    + `last_upload`: `2010-11-05T16:01:54+00:00` (string, nullable) - An ISO8601 date when a new suppression file was last uploaded
 
 ## Creative Minimal (object)
 + `_links` (object)
@@ -288,7 +301,9 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Creative Lite (Creative Minimal)
 + `_embedded` (object)
     + campaign (Campaign Minimal) - The campaign the creative is linked to
-+ size: {'width': 468, 'height': 60} (object) - The creative's width and height (Banner and HTML types only)
++ size: (object, optional) - The creative's width and height (Banner and HTML types only)
+    + width: 468 (number)
+    + height: 60 (number)
 + thumbnail (string) - URL to the creative's thumbnail image
 + url (string) - Publisher's URL for this creative (Basic and Banner types only)
 
@@ -313,7 +328,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Pixel Full (Pixel Minimal)
 + `_embedded` (object)
     + campaign (Campaign Minimal) - The campaign the pixel is linked to
-    
+
 ## Pixel Full Global (Pixel Base)
 + global: true (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
 + `_embedded`: {} (object)
@@ -331,7 +346,3 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Campaign Approval Full (Campaign Approval Minimal)
 + `_embedded` (object)
     + campaign (Campaign Minimal) - The campaign the approval is for
-
-
-
-
