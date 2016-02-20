@@ -64,6 +64,127 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Campaigns Collection)
 
+# Group Campaign Approvals
+
+## Campaign Approval Resource [/v1/campaign_approvals/{approval_id}{?publisher_id}]
+
++ Parameters
+    + approval_id: 1 (required, number) - ID of the approval to fetch
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
++ Attributes (Campaign Approval Full)
+
+### View a Campaign Approval Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Campaign Approval Full)
+
+## Campaign Approval Collection [/v1/campaign_approvals{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/campaign_approvals (string)
+            + last: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
+    + `_embedded` (object)
+        + `campaign_approvals` (array[Campaign Approval Full])
+
+### List Campaign Approvals [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Campaign Approval Collection)
+
+### Make an Approval Request [POST]
+
++ Request (application/json)
+
+        {
+            "campaign_id": 2
+        }
+
++ Response 200 (application/hal+json)
+    + Headers
+
+            Location: https://affiliate.api.diablomedia.com/v1/campaign_approvals/1/
+
+    + Attributes (Campaign Approval Full)
+
+# Group Categories
+
+## Category Collection [/v1/categories{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/categories?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/categories (string)
+            + last: https://affiliate.api.diablomedia.com/v1/categories?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/categories?page=2 (string)
+    + `_embedded` (object)
+        + `categories` (array[Category Full])
+
+### List Categories [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Category Collection)
+
+# Group Contacts
+
+## Contact Resource [/v1/contacts/{contact_id}{?publisher_id}]
+
++ Attributes (Contact Full)
+
++ Parameters
+    + contact_id: 1 (required, number) - ID of the Contact
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
+### View a Contact Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Contact Full)
+
+### Update a Contact [PUT]
+
++ Request (application/json)
+    + Attributes (Contact Writable)
+
++ Response 200 (application/hal+json)
+    + Attributes (Contact Full)
+
+## Contacts Collection [/v1/contacts{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/contacts?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/contacts (string)
+            + last: https://affiliate.api.diablomedia.com/v1/contacts?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/contacts?page=2 (string)
+    + `_embedded` (object)
+        + contacts (array[Contact Lite])
+
+### View a Contact List [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Contacts Collection)
+
 # Group Creatives
 
 ## Creative Resource [/v1/creatives/{creative_id}{?publisher_id}]
@@ -119,7 +240,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
 
-### Update a Pixel [PATCH]
+### Update a Pixel [PUT]
 
 + Request (application/json)
 
@@ -163,41 +284,28 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### Adding Pixels [POST]
 
-+ Request Global Pixel
++ Request Add a Global Pixel
 
             {
-                "pixel":"http://test.com"
+                "pixel": "http://test.com"
             }
 
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full Global)
 
-+ Request Campaign Pixel
++ Request Add a Campaign Pixel
 
             {
-                "pixel":"http://test.com",
-                "campaign_id":1
+                "pixel": "http://test.com",
+                "campaign_id": 1
             }
 
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
 
-# Group Campaign Approvals
+# Group Traffic Types
 
-## Campaign Approval Resource [/v1/campaign_approvals/{approval_id}{?publisher_id}]
-
-+ Parameters
-    + approval_id: 1 (required, number) - ID of the approval to fetch
-    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
-
-+ Attributes (Campaign Approval Full)
-
-### View a Campaign Approval Detail [GET]
-
-+ Response 200 (application/hal+json)
-    + Attributes (Campaign Approval Full)
-
-## Campaign Approval Collection [/v1/campaign_approvals{?publisher_id}]
+## Traffic Type Collection [/v1/traffic_types{?publisher_id}]
 
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
@@ -207,33 +315,17 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + total: 2 (number) - Total number of results available
     + `_links` (object)
         + self (object)
-            + href: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=1 (string)
-            + first: https://affiliate.api.diablomedia.com/v1/campaign_approvals (string)
-            + last: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
-            + next: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
+            + href: https://affiliate.api.diablomedia.com/v1/traffic_types?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/traffic_types (string)
+            + last: https://affiliate.api.diablomedia.com/v1/traffic_types?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/traffic_types?page=2 (string)
     + `_embedded` (object)
-        + `campaign_approvals` (array[Campaign Approval Full])
+        + `traffic_types` (array[Traffic Type Full])
 
-### List Campaign Approvals [GET]
-
-+ Response 200 (application/hal+json)
-    + Attributes (Campaign Approval Collection)
-
-### Make an Approval Request [POST]
-
-+ Request (application/json)
-
-        {
-            "campaign_id": 2
-        }
+### List Traffic Types [GET]
 
 + Response 200 (application/hal+json)
-    + Headers
-
-            Location: https://affiliate.api.diablomedia.com/v1/campaign_approvals/1/
-
-    + Attributes (Campaign Approval Full)
-
+    + Attributes (Traffic Type Collection)
 
 # Data Structures
 
@@ -250,13 +342,13 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ## Campaign Lite Base (Campaign Base)
 + `approval_status`: approved (string) - Approval Status of campaign ['approved','pending','denied','not_approved']
-+ categories: [] (array) - Array of category objects
++ categories: [] (array[Category Base]) - Array of category objects
 + created: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when the campaign was created
 + description (string) - Campaign description, may contain HTML
 + epc: 1.00 (number) - Publisher's EPC for this campaign
 + payout: 5.00 (number) - The payout amount for this campaign (dollar amount for CPA/CPC campaigns, percentage for RevShare)
 + payout_type: CPA (string) - The payout type of the campaign (CPA, CPC, RevShare)
-+ traffic_types: [] (array) - Array of traffic type objects
++ traffic_types: [] (array[Traffic Type Base]) - Array of traffic type objects
 + type: Standard (string) - Type of campaign (Standard, PayPerCall, CoReg)
 + url: https://test.com (string) - URL of the offer's home page
 
@@ -320,7 +412,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + id: 1 (number) - Pixel's Id
 + pixel: https://test.com (string, required) - The content of the pixel (either the URL for "url" types, or the HTML content for "html" types)
 + type: url (string) - The type of the pixel (either "url" or "html")
-+ version: 1 (number) - The internal version number of this pixel (updated when pixel is edited)
++ version: 1 (number) - The internal version number of this pixel (incremented when pixel is edited)
 
 ## Pixel Minimal (Pixel Base)
 + global: false (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
@@ -346,3 +438,64 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Campaign Approval Full (Campaign Approval Minimal)
 + `_embedded` (object)
     + campaign (Campaign Minimal) - The campaign the approval is for
+
+## Category Base (object)
++ id: 1 (number) - Category Id
++ name: Category (string) - Category's Name
++ slug: category (string) - Category's Name to be used in URLs
+
+## Category Full (Category Base)
++ `_links` (array)
+
+## Traffic Type Base (object)
++ id: 1 (number) - Traffic Type Id
++ name: Category (string) - Traffic Type's Name
++ slug: category (string) - Traffic Type's Name to be used in URLs
+
+## Traffic Type Full (Traffic Type Base)
++ `_links` (array)
+
+## Contact Base (object)
++ id: 1 (number) - Contact Id
++ email: test@test.com (string) - Contact's Email Address
++ first_name: John (string) - Contact's First Name
++ last_name: Doe (string) - Contact's Last Name
++ phone: 123-555-1234 (string) - Contact's Phone Number
++ type: Primary (string) - The type of contact at the company (Executive, Primary, Technical, Accounting, etc...)
++ version: 1 (number) - The version number of this record, increments when the record is updated.
+
+## Contact Writable (object)
++ address: 123 Main St. (string, optional) - First line of Street Address
++ address2: Apt 102 (string, optional) - Second line of Street Address
++ birthday: 05/31 (string, optional) - Month/Day of contact's birthday
++ city: Anycity (string, optional) - City of Street Address
++ country: US (string, optional) - Country of Street Address
++ fax: 123-555-1234 (string, optional) - Contact's Fax number
++ first_name: John (string, optional) - Contact's first name
++ id: 1 (number, required) - Contact's Id
++ last_name: Doe (string, optional) - Contact's last name
++ messaging: {'msn': '', 'aim': '', 'skype': '', 'yim': '', 'twitter': '', 'icq': '', 'linkedin': ''} (object, optional) - Contact's messaging accounts
++ mobile_phone: 123-555-2134 (string, optional) - Contact's mobile phone number
++ password: abc123pass (string, optional) - Update/set the password used to login
++ phone: 123-555-2233 (string, optional) - Contact's phone number
++ postal_code: 90210 (string, optional) - Postal Code of Street Address
++ region: CA (string, optional) - State/Province/Region of Street Address
++ version: 1 (number, required) - The version of the record at the time of editing
+
+## Contact Lite (Contact Base)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/contacts/1 (string)
+
+## Contact Full (Contact Lite)
++ address2: Apt 102 (string, optional) - Second line of Contact's Street Address
++ address: 123 Main St. (string, optional) - First line of Contact's Street Address
++ birthday: (string, optional) - Contact's Birthday
++ city: Anycity (string, optional) - City of Contact's Street Address
++ country: US (string, optional) - Country of Contact's Street Address
++ fax: 123-555-1234 (string, optional) - Contact's Fax number
++ has_password: false (boolean) - Whether or not Contact has a password set
++ messaging: (object) - Object containing Contact's different IM messaging account names (MSN, AIM, YIM, Skype, etc...)
++ mobile_phone: 123-555-1234 (string, optional) - Contact's mobile phone number
++ postal_code: 12345 (string, optional) - Contact's Street Address postal code
++ region: NY (string, optional) - Region part of Contact's Street Address
