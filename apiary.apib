@@ -32,6 +32,29 @@ Nothing to see here?
 + Response 200 (application/hal+json)
     + Attributes (Campaign Full)
 
+## Campaign Creatives Export [/v1/campaigns/{campaign_id}/creatives_export{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+    + campaign_id: 1 (required, number) - ID of the Campaign to export creatives for
+
+### Export Creatives [GET]
+
++ Response 200 (application/zip)
+
+## Campaign Suppression Download [/v1/campaigns/{campaign_id}/suppression{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+    + campaign_id: 1 (required, number) - ID of the Campaign to download the suppression file for
+
+### Download Suppression File [GET]
+
++ Response 302
+    + Headers
+
+            Location: https://test.com/text.csv
+
 ## Campaigns Collection [/v1/campaigns{?category,country,page,payout_type,publisher_id,sort,traffic_type,type,visibility}]
 
 Paged listing of all campaigns available, can be filtered by various campaign properties.
@@ -79,10 +102,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Campaign Approval Full)
 
-## Campaign Approval Collection [/v1/campaign_approvals{?publisher_id}]
+## Campaign Approval Collection [/v1/campaign_approvals{?page,publisher_id}]
 
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+    + page: 1 (optional, number) - Page number of results
 
 + Attributes
     + count: 1 (number) - Number of results in this response
@@ -128,10 +152,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + total: 2 (number) - Total number of results available
     + `_links` (object)
         + self (object)
-            + href: https://affiliate.api.diablomedia.com/v1/categories?page=1 (string)
-            + first: https://affiliate.api.diablomedia.com/v1/categories (string)
-            + last: https://affiliate.api.diablomedia.com/v1/categories?page=2 (string)
-            + next: https://affiliate.api.diablomedia.com/v1/categories?page=2 (string)
+            + href: https://affiliate.api.diablomedia.com/v1/categories (string)
     + `_embedded` (object)
         + `categories` (array[Category Full])
 
@@ -185,6 +206,43 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Contacts Collection)
 
+# Group Countries
+
+## Country Collection [/v1/countries{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/countries?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/countries (string)
+            + last: https://affiliate.api.diablomedia.com/v1/countries?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/countries?page=2 (string)
+    + `_embedded` (object)
+        + `countries` (array[Country Full])
+
+### List Countries [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Country Collection)
+
+## Country Resource [/v1/countries/{country_code}{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account your are working as
+    + country_code: US (required, string) - 2 digit ISO code for Country to fetch
+
++ Attributes (Country Full)
+
+### View a Country Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Country Resource)
+
 # Group Creatives
 
 ## Creative Resource [/v1/creatives/{creative_id}{?publisher_id}]
@@ -225,6 +283,71 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Creatives Collection)
 
+## Export Creatives [/v1/creatives/{creative_id}/export{?publisher_id}]
+
++ Parameters
+    + creative_id: 2 (number, required) - ID of the creative to export
+    + publisher_id: 10000 (number, required) - ID of the Publisher account you are working as
+
+### Export Creative [GET]
+
++ Response 200 (application/zip)
+    + Body
+
+# Group Messages
+
+## Message Resource [/v1/messages/{message_id}{?publisher_id}]
+
++ Attributes (Message Full)
+
++ Parameters
+    + message_id: 1 (required, number) - ID of the message to fetch
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
+### View a Message Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Message Resource)
+
+### Mark a Message as Read [PUT]
+
++ Request (application/json)
+
+        {
+            "id": 1,
+            "read": true
+        }
+
++ Response 200 (application/hal+json)
+    + Attributes (Message Resource)
+
+### Delete a Message [DELETE]
+
++ Response 204
+
+## Message Collection [/v1/messages{?page,publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (number, required) - ID of the Publisher account you are working as
+    + page: 1 (number, optional) - Page number of results to fetch
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/messages?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/messages (string)
+            + last: https://affiliate.api.diablomedia.com/v1/messages?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/messages?page=2 (string)
+    + `_embedded` (object)
+        + messages (array[Message Lite])
+
+### List Messages [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Message Collection)
+
 # Group Pixels
 
 ## Pixel Resource [/v1/pixels/{pixel_id}{?publisher_id}]
@@ -244,14 +367,18 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 + Request (application/json)
 
-            {
-                "pixel": "http://test.com",
-                "version": 1
-            }
+        {
+            "pixel": "http://test.com",
+            "version": 1
+        }
 
 
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
+
+### Delete a Pixel [DELETE]
+
++ Response 204
 
 ## Pixels Collection [/v1/pixels{?campaign,global,page,publisher_id,sort,type}]
 
@@ -303,6 +430,51 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
 
+# Group Publishers
+
+## Publisher Resource [/v1/publishers/{id}{?publisher_id}]
+
++ Parameters
+    + id: 10001 (number, required) - The ID of the Publisher you want to view
+    + publisher_id: 10000 (number, required) - ID of the Publisher account you are working as
+
++ Attributes (Publisher Full)
+
+### View a Publisher Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Publisher Full)
+
+### Update a Publisher [PUT]
+
++ Parameters
+    + id: 10000
+
++ Request (application/json)
+
+        {
+            "id": 10000,
+            "version": 1,
+            "website": "https://test.com"
+        }
+
+
++ Response 200 (application/hal+json)
+    + Attributes (Publisher Full)
+
+## Publisher Manager Resource [/v1/publishers/{id}/manager{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (number, required) - ID of the Publisher account you are working as
+    + id: 10000 (number, required) - The ID of the Publisher whose manager you want to view
+
++ Attributes (Manager Full)
+
+### View a Manager Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Publisher Manager Resource)
+
 # Group Traffic Types
 
 ## Traffic Type Collection [/v1/traffic_types{?publisher_id}]
@@ -326,6 +498,56 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 + Response 200 (application/hal+json)
     + Attributes (Traffic Type Collection)
+
+# Group Transactions
+
+## Transaction Collection [/v1/transactions{?campaign,country,creative,end,ip,page,publisher_id,sid,sort,start,trx,type}]
+
++ Parameters
+    + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
+    + campaign: 1 (number) - Filter transactions by a campaign
+    + country: US (string) - Filter transactions by a country
+    + creative: 1 (number) - Filter transactions by a creative id
+    + end: `2015-01-31` (string) - End Date of date range, in YYYY-MM-DD format
+    + ip: 123.123.* (string) - Filter transactions by an IP address (can use asterisk as a wildcard character)
+    + page: 1 (number) - Page number of transactions to fetch
+    + sid: 123abc* (string) - Filter transactions by SubId (can use asterisk as a wildcard character)
+    + sort: created (string) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
+    + start: `2015-01-01` (string) - Start Date of date range, in YYYY-MM-DD format
+    + trx: kdkd* (string) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
+    + type: lead (string) - Filter transactions by their type, can be "lead", "click" or "call"
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/transactions?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/transactions (string)
+            + last: https://affiliate.api.diablomedia.com/v1/transactions?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/transactions?page=2 (string)
+        + export (object)
+            + href: https://affiliate.api.diablomedia.com/v1/transactions/export
+    + `_embedded` (object)
+        + transactions (array[Transaction Full])
+
+### List Transactions [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Transaction Collection)
+
+## Transaction Resource [/v1/transactions/{transaction_id}{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
+    + transaction_id: L1 (string,required) - Transaction ID to fetch
+
++ Attributes (Transaction Full)
+
+### View a Transaction Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Transaction Resource)
 
 # Data Structures
 
@@ -367,7 +589,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + suppression
         + href: https://affiliate.api.diablomedia.com/campaigns/1/suppression (string)
 + countries: [] (array) - Array of country objects
-+ coreg: (object, optional) - If campaign is CoReg type, this will contain posting fields and instructions
++ coreg (object, optional) - If campaign is CoReg type, this will contain posting fields and instructions
     + fields (array)
     + additional_instructions (string)
     + posting_url (string)
@@ -393,7 +615,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Creative Lite (Creative Minimal)
 + `_embedded` (object)
     + campaign (Campaign Minimal) - The campaign the creative is linked to
-+ size: (object, optional) - The creative's width and height (Banner and HTML types only)
++ size (object, optional) - The creative's width and height (Banner and HTML types only)
     + width: 468 (number)
     + height: 60 (number)
 + thumbnail (string) - URL to the creative's thumbnail image
@@ -480,7 +702,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + phone: 123-555-2233 (string, optional) - Contact's phone number
 + postal_code: 90210 (string, optional) - Postal Code of Street Address
 + region: CA (string, optional) - State/Province/Region of Street Address
-+ version: 1 (number, required) - The version of the record at the time of editing
++ version: 1 (number, required) - The version of the record at the time of retrieval
 
 ## Contact Lite (Contact Base)
 + `_links` (object)
@@ -490,12 +712,119 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Contact Full (Contact Lite)
 + address2: Apt 102 (string, optional) - Second line of Contact's Street Address
 + address: 123 Main St. (string, optional) - First line of Contact's Street Address
-+ birthday: (string, optional) - Contact's Birthday
++ birthday: 05/31 (string, optional) - Contact's Birthday in MM/DD format
 + city: Anycity (string, optional) - City of Contact's Street Address
 + country: US (string, optional) - Country of Contact's Street Address
 + fax: 123-555-1234 (string, optional) - Contact's Fax number
 + has_password: false (boolean) - Whether or not Contact has a password set
-+ messaging: (object) - Object containing Contact's different IM messaging account names (MSN, AIM, YIM, Skype, etc...)
++ messaging (object) - Object containing Contact's different IM messaging account names (MSN, AIM, YIM, Skype, etc...)
 + mobile_phone: 123-555-1234 (string, optional) - Contact's mobile phone number
 + postal_code: 12345 (string, optional) - Contact's Street Address postal code
 + region: NY (string, optional) - Region part of Contact's Street Address
+
+## Country Base (object)
++ id: US (string) - Country ID
++ code: US (string) - Country's 2 digit ISO Code
++ name: United States (string) - Country's full name
+
+## Country Full (Country Base)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/countries/US (string)
+
+## Message Base (object)
++ id: 1 (number) - Message ID
++ author (object)
+    + first_name: John (string) - Author's first name
+    + last_name: Doe (string) - Author's last name
+    + email: john@test.com (string) - Author's email address
++ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the message was created
++ priority: info (string) - Priority level of the message
++ read: false (boolean) - Whether or not the message has been read
++ title: Test Message (string) - Title/Subject of the message
++ type: message (string) - The type of message (can be "message", "promo", "alert", "compliance")
+
+## Message Lite (Message Base)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/messages/1 (string)
+
+## Message Full (Message Lite)
++ content: <b>HTML content of message</b> (string) - The full content of the message (can contain HTML)
++ text_content: Just text content (string) - Text version of the content
+
+## Publisher Base (object)
++ id: 10000 (number) - Publisher's Id
++ version: 1 (number) - The version of the record at the time of retrieval
++ company: Test Publisher (string) - Publisher's Company name
++ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the publisher was created
++ primary_contact_id: 1 (number) - The "owning" contact record of this Publisher
++ website: http://test.com (string) - The Publisher's company website
+
+## Publisher Lite (Publisher Base)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/publishers/10000 (string)
++ `_embedded` (object)
+    + categories (array[Category Full]) - Offer Categories Publisher is interested in
+    + traffic_types (array[Traffic Type Full]) - Traffic Types Publisher is capable of running
+
+## Publisher Full (Publisher Base)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/publishers/10000 (string)
++ `_embedded` (object)
+    + categories (array[Category Full]) - Offer Categories Publisher is interested in
+    + traffic_types (array[Traffic Type Full]) - Traffic Types Publisher is capable of running
+    + contacts (array[Contact Lite]) - Contacts linked to this publisher account
+    + manager (Manager Full)
+
+## Publisher Owned (Publisher Full)
++ payment_info (object)
+    + payee: Jane Doe (string) - Payee's Name
+    + payto: Personal (string) - Whether Payee is a Company or a Personal account (allowed values are Personal and Company)
+    + method: Check (string) - Payment method, must be one of "Check", "Paypal" or "ACH"
+    + ach_bank: Bank One (string, optional) - If method is "ACH" this must be sent, ACH Bank's name
+    + ach_account: 123456 (string, optional) - If method is "ACH" this must be sent, ACH Bank's account number
+    + ach_routing: 019292 (string, optional) - If method is "ACH" this must be sent, ACH Bank's routing number
+    + ach_type: Checking (string, optional) - If method is "ACH" this must be sent, ACH Account type. Either "Savings" or "Checking"
+    + paypal_address: test@test.com (string, optional) - If method is "Paypal" this must be sent, Paypal email address that should receive payment
+
+## Manager Base (object)
++ id: 1 (number) - Manager's Id
++ email: test@test.com (string) - Manager's Email address
++ fax: 123-555-1234 (string) - Manager's Fax number
++ first_name: Jane (string) - Manager's first name
++ last_name: Manager (string) - Manager's last name
++ messaging (object) - Object of different messaging accounts to contact Manager
+    + aim: jane123 (string) - AIM name
+    + linkedin: jane123 (string) - LinkedIn name
+    + twitter: @jane123 (string) - Twitter handle
+    + skype: jane123 (string) - Skype name
++ mobile: 123-555-3030 (string) - Manager's mobile phone number
++ phone: 123-555-3232 (string) - Manager's phone number
+
+## Manager Full (Manager Base)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/publishers/10000/manager (string)
+
+## Transaction Base (object)
++ `_embedded` (object)
+    + campaign (Campaign Minimal)
+    + country (Country Full)
++ id: L1 (string) - Transaction Id
++ browser: Firefox (string) - Name of the browser from user's user-agent
++ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the transaction was created
++ creative: 1 (number) - Id of the creative used in the transaction
++ `device_type`: Desktop (string) - Device type from user's user-agent, example values "Desktop", "Mobile Phone", "Tablet" (not exhaustive)
++ ip: 123.123.123.123 (string) - IP Address of user
++ revenue: 1.50 (number) - Dollar amount of transaction (US Dollars)
++ sid: 12345abc (string) - SubId sent by Publisher for this transaction
++ trx: jkjkl333 (string) - TrxId sent by Publisher for this transaction
++ type: lead (string) - Type of transaction (can be "lead", "click" or "call")
+
+## Transaction Full (Transaction Base)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/transactions/L1 (string)
