@@ -475,6 +475,96 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Publisher Manager Resource)
 
+# Group Summary Report
+
+## Summary Report Endpoint [/v1/reports/summary{?campaign,calls,click_through,clicks,country,creative,end,epc,group,impressions,leads,publisher_id,revenue,sid,sign_up,sort,start}]
+
++ Parameters
+    + campaign: 1 (number) - Filter report data by Campaign id
+    + calls: >=0 (string) - Filter report data by number of Calls (can use <, > and = to specify ranges)
+    + click_through: >0 (string) - Filter report data by Click Through range (can use <, > and = to specify ranges)
+    + clicks: >=1 (string) - Filter report data by number of Clicks (can use <, > and = to specify ranges)
+    + country: US (string) - Filter report data by Country (2 digit ISO code)
+    + creative: 1 (number) - Filter report data by Creative id
+    + end: `2015-01-31` (string, required) - End date of the date range to get summary data for
+    + epc: <10 (string) - Filter report data by EPC range (can use <, > and = to specify ranges)
+    + group: campaign (enum[string]) - Which dimension to group the results by
+        + Members
+            + campaign
+            + day
+            + sid
+            + creative
+            + country
+            + publisher
+    + impressions: >0 (string) - Filter report data by number of Impressions (can use <, > and = to specify ranges)
+    + leads: >=1 (string) - Filter report data by Leads (can use >, < and = to specify ranges)
+    + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
+    + revenue: <1000 (string) - Filter report data by Revenue range (can use <, > and = to specify ranges)
+    + sid: 123* (string) - Filter report data by SubId (can use asterisk as wildcard)
+    + sign_up: `0-100` (string) - Filter report data by Sign Up Ratio range (specify as a range of values to include)
+    + sort: `-revenue` (string) - Which column to sort results by, can prefix with a dash (-) to reverse sort direction
+    + start: `2015-01-01` (string, required) - Start date of the date range to get summary data for
+
+### Fetch Summary Data [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes
+        + count: 1 (number) - Number of grouped rows in result
+        + total: 1 (number) - Number of available grouped rows
+        + start: `2015-01-01` (string) - The start of the date range requested
+        + end: `2015-01-31` (string) - The end of the date range requested
+        + group: campaign (string) - The grouped column specified in the request
+        + tz_offset: `-0700` (string) - The timezone offset of the data
+        + totals (object)
+            + impressions: 10 (number) - Total number of impressions for this data set
+            + clicks: 5 (number) - Total number of clicks for this data set
+            + leads: 2 (number) - Total number of leads for this data set
+            + calls: 1 (number) - Total number of calls for this data set
+            + revenue: 10.50 (number) - Total revenue for this data set
+            + click_through: 50 (number) - Total click through percent for this data set
+            + sign_up: 40 (number) - Total sign up ration for this data set
+            + epc: 2.1 (number) - Total EPC for this data set
+        + _embedded (object)
+            + data (array[Summary Report Row])
+        + _links (object)
+            + self
+                + href: https://affiliate.api.diablomedia.com/v1/reports/summary (string) - Self link to the report requested
+            + export
+                + href: https://affiliate.api.diablomedia.com/v1/reports/summary/export (string) - Link to export this report as CSV data
+
+## Summary Report Export [/v1/reports/summary/export{?campaign,calls,click_through,clicks,country,creative,end,epc,group,impressions,leads,publisher_id,revenue,sid,sign_up,sort,start}]
+
++ Parameters
+    + campaign: 1 (number) - Filter report data by Campaign id
+    + calls: >=0 (string) - Filter report data by number of Calls (can use <, > and = to specify ranges)
+    + click_through: >0 (string) - Filter report data by Click Through range (can use <, > and = to specify ranges)
+    + clicks: >=1 (string) - Filter report data by number of Clicks (can use <, > and = to specify ranges)
+    + country: US (string) - Filter report data by Country (2 digit ISO code)
+    + creative: 1 (number) - Filter report data by Creative id
+    + end: `2015-01-31` (string, required) - End date of the date range to get summary data for
+    + epc: <10 (string) - Filter report data by EPC range (can use <, > and = to specify ranges)
+    + group: campaign (enum[string]) - Which dimension to group the results by
+        + Members
+            + campaign
+            + day
+            + sid
+            + creative
+            + country
+            + publisher
+    + impressions: >0 (string) - Filter report data by number of Impressions (can use <, > and = to specify ranges)
+    + leads: >=1 (string) - Filter report data by Leads (can use >, < and = to specify ranges)
+    + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
+    + revenue: <1000 (string) - Filter report data by Revenue range (can use <, > and = to specify ranges)
+    + sid: 123* (string) - Filter report data by SubId (can use asterisk as wildcard)
+    + sign_up: `0-100` (string) - Filter report data by Sign Up Ratio range (specify as a range of values to include)
+    + sort: `-revenue` (string) - Which column to sort results by, can prefix with a dash (-) to reverse sort direction
+    + start: `2015-01-01` (string, required) - Start date of the date range to get summary data for
+
+### Export Summary Data [GET]
+
++ Response 200 (text/csv)
+
+
 # Group Traffic Types
 
 ## Traffic Type Collection [/v1/traffic_types{?publisher_id}]
@@ -536,6 +626,27 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Transaction Collection)
 
+## Transaction Export [/v1/transactions/export{?campaign,country,creative,end,ip,page,publisher_id,sid,sort,start,trx,type}]
+
++ Parameters
+    + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
+    + campaign: 1 (number) - Filter transactions by a campaign
+    + country: US (string) - Filter transactions by a country
+    + creative: 1 (number) - Filter transactions by a creative id
+    + end: `2015-01-31` (string) - End Date of date range, in YYYY-MM-DD format
+    + ip: 123.123.* (string) - Filter transactions by an IP address (can use asterisk as a wildcard character)
+    + page: 1 (number) - Page number of transactions to fetch
+    + sid: 123abc* (string) - Filter transactions by SubId (can use asterisk as a wildcard character)
+    + sort: created (string) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
+    + start: `2015-01-01` (string) - Start Date of date range, in YYYY-MM-DD format
+    + trx: kdkd* (string) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
+    + type: lead (string) - Filter transactions by their type, can be "lead", "click" or "call"
+
+### Export Transactions [GET]
+
++ Response 200 (text/csv)
+
+
 ## Transaction Resource [/v1/transactions/{transaction_id}{?publisher_id}]
 
 + Parameters
@@ -556,6 +667,16 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + name: Campaign Name (string) - Campaign's Name
 + status: active (string) Campaign's Status ("active", "inactive")
 + thumbnail (string) URL to campaign's thumbnail image
+
+## Campaign Report Base (object)
++ id: 1 (number) - Campaign's Id
++ name: Campaign Name (string) - Campaign's Name
++ payout_type: CPA (string) - The payout type of the campaign (CPA, CPC, RevShare)
++ type: Standard (string) - Type of campaign (Standard, PayPerCall, CoReg)
++ status: active (string) Campaign's Status ("active", "inactive")
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/campaigns/1 (string)
 
 ## Campaign Minimal (Campaign Base)
 + `_links` (object)
@@ -583,12 +704,13 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + `_embedded` (object)
     + creatives (array[Creative Minimal]) - Low density view of Campaign's creatives
     + pixels (array[Pixel Minimal]) - Low density view of Campaign's third party pixels for this publisher
+    + countries (array[Country Full]) - Array of country objects
+    + `phone_numbers`: [] (array, optional) - Phone numbers this publisher has created for this campaign (PayPerCall only)
 + `_links` (object)
     + `creatives_export`
         + href: https://affiliate.api.diablomedia.com/campaigns/1/creatives_export (string)
     + suppression
         + href: https://affiliate.api.diablomedia.com/campaigns/1/suppression (string)
-+ countries: [] (array) - Array of country objects
 + coreg (object, optional) - If campaign is CoReg type, this will contain posting fields and instructions
     + fields (array)
     + additional_instructions (string)
@@ -596,12 +718,14 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + sample_url (string)
 + `from_lines`: [] (array) - Array of approved Email "from" lines
 + `phone_number_limit`: 5 (number, optional) - The limit of static phone numbers this publisher is allowed to have on this campaign (PayPerCall only)
-+ `phone_numbers`: [] (array, optional) - Phone numbers this publisher has created for this campaign (PayPerCall only)
 + `pixel_type`: cookie (string) - The pixel type this campaign uses (either "cookie" or "server_to_server")
 + `subject_lines`: [] (array) - Array of approved Email Subject Lines for this campaign
 + suppression (object)
     + `last_download`: `2010-11-05T16:01:54+00:00` (string, nullable) - An ISO8601 date when the suppression file was last downloaded by this publisher
     + `last_upload`: `2010-11-05T16:01:54+00:00` (string, nullable) - An ISO8601 date when a new suppression file was last uploaded
+
+## Creative Report Base (object)
++ id: 1 (number) - Creative's Id
 
 ## Creative Minimal (object)
 + `_links` (object)
@@ -723,8 +847,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + region: NY (string, optional) - Region part of Contact's Street Address
 
 ## Country Base (object)
-+ id: US (string) - Country ID
-+ code: US (string) - Country's 2 digit ISO Code
++ id: US (string) - Country's 2 digit ISO Code
 + name: United States (string) - Country's full name
 
 ## Country Full (Country Base)
@@ -828,3 +951,19 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + `_links` (object)
     + self
         + href: https://affiliate.api.diablomedia.com/transactions/L1 (string)
+
+## Summary Report Row (object)
++ _embedded (object, optional)
+    + campaign (Campaign Report Base, optional) - Campaign that this row represents, will only be available if the requested data is grouped by Campaign
+    + country (Country Full, optional) - Country that this row represents, will only be available if the requested data is grouped by Country
+    + creative (Creative Report Base, optional) - Creative that this row represents, will only be available if the requested data is grouped by Creative
++ impressions: 10 (number) - Number of impressions for this row
++ clicks: 5 (number) - Number of clicks for this row
++ leads: 2 (number) - Number of leads for this row
++ calls: 1 (number) - Number of calls for this row
++ revenue: 10.5 (number) - Amount of revenue for this row
++ click_through: 50 (number) - Click-through percentage for this row
++ sign_up: 40 (number) - Sign-up ratio for this row
++ epc: 2.1 (number) - EPC for this row
++ day: `2015-01-01` (string, optional) - Date that this row represents, will only be available if the requested data is grouped by Day
++ sid: 123456abc (string, optional) - SubId that this row represents, will only be available if the requested data is grouped by SubId
