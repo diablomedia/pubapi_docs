@@ -102,11 +102,10 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Campaign Approval Full)
 
-## Campaign Approval Collection [/v1/campaign_approvals{?page,publisher_id}]
+## Campaign Approval Collection [/v1/campaign_approvals{?publisher_id}]
 
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
-    + page: 1 (optional, number) - Page number of results
 
 + Attributes
     + count: 1 (number) - Number of results in this response
@@ -121,6 +120,9 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
         + `campaign_approvals` (array[Campaign Approval Full])
 
 ### List Campaign Approvals [GET]
+
++ Parameters
+  + page: 1 (optional, number) - Page number of results
 
 + Response 200 (application/hal+json)
     + Attributes (Campaign Approval Collection)
@@ -348,6 +350,72 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Message Collection)
 
+# Group Phone Numbers
+
+## Phone Number Resource [/v1/phone_numbers/{number_id}{?publisher_id}]
+
++ Attributes (Phone Number Full)
+
++ Parameters
+    + number_id: 1 (required, number) - ID of the Phone Number to fetch
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
+### View a Phone Number Detail [GET]
+
++ Response 200 (application/hal+json)
+    + Attributes (Phone Number Full)
+
+### Delete a Phone Number [DELETE]
+
++ Response 204
+
+## Phone Number Collection [/v1/phone_numbers{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/phone_numbers?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/phone_numbers (string)
+            + last: https://affiliate.api.diablomedia.com/v1/phone_numbers?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/phone_numbers?page=2 (string)
+    + `_embedded` (object)
+        + phone_numbers (array[Phone Number Lite])
+
+### View Phone Number List [GET]
+
++ Parameters
+    + campaign: 1 (optional, number) - Filter the results by campaign id
+    + page: 1 (optional, number) - The page of phone numbers to return
+
++ Response 200 (application/hal+json)
+    + Attributes (Phone Number Collection)
+
+### Add Phone Numbers [POST]
+
++ Request Add a Phone Number (application/json)
+
+            {
+                "campaign_id": 1
+            }
+
++ Response 200 (application/hal+json)
+    + Attributes (Phone Number Full)
+
++ Request Add a Phone Number with Sid (application/json)
+
+            {
+                "campaign_id": 1,
+                "sid": "abc123"
+            }
+
++ Response 200 (application/hal+json)
+    + Attributes (Phone Number Full Sid)
+
 # Group Pixels
 
 ## Pixel Resource [/v1/pixels/{pixel_id}{?publisher_id}]
@@ -380,7 +448,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 + Response 204
 
-## Pixels Collection [/v1/pixels{?campaign,global,page,publisher_id,sort,type}]
+## Pixels Collection [/v1/pixels{?publisher_id}]
 
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
@@ -402,7 +470,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Parameters
     + campaign: 1 (optional, number) - Filter the results by campaign id
     + global: false (optional, boolean) - Filter the results by their global status
-    + page: 1 (optional, number) - The page of campaigns to return
+    + page: 1 (optional, number) - The page of pixels to return
     + sort: id (optional, string) - Sort the results by this field, prepend with a dash (-) to reverse the sort direction
     + type: url (optional, string) - Filter the results by pixel type (url or html)
 
@@ -411,7 +479,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### Adding Pixels [POST]
 
-+ Request Add a Global Pixel
++ Request Add a Global Pixel (application/json)
 
             {
                 "pixel": "http://test.com"
@@ -420,7 +488,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full Global)
 
-+ Request Add a Campaign Pixel
++ Request Add a Campaign Pixel (application/json)
 
             {
                 "pixel": "http://test.com",
@@ -676,12 +744,12 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + status: active (string) Campaign's Status ("active", "inactive")
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/campaigns/1 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1 (string)
 
 ## Campaign Minimal (Campaign Base)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/campaigns/1 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1 (string)
 
 ## Campaign Lite Base (Campaign Base)
 + `approval_status`: approved (string) - Approval Status of campaign ['approved','pending','denied','not_approved']
@@ -698,19 +766,19 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Campaign Lite (Campaign Lite Base)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/campaigns/1 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1 (string)
 
 ## Campaign Full (Campaign Lite Base)
 + `_embedded` (object)
     + creatives (array[Creative Minimal]) - Low density view of Campaign's creatives
     + pixels (array[Pixel Minimal]) - Low density view of Campaign's third party pixels for this publisher
     + countries (array[Country Full]) - Array of country objects
-    + `phone_numbers`: [] (array, optional) - Phone numbers this publisher has created for this campaign (PayPerCall only)
+    + `phone_numbers` (array[Phone Number Minimal], optional) - Phone numbers this publisher has created for this campaign (PayPerCall only)
 + `_links` (object)
     + `creatives_export`
-        + href: https://affiliate.api.diablomedia.com/campaigns/1/creatives_export (string)
+        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1/creatives_export (string)
     + suppression
-        + href: https://affiliate.api.diablomedia.com/campaigns/1/suppression (string)
+        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1/suppression (string)
 + coreg (object, optional) - If campaign is CoReg type, this will contain posting fields and instructions
     + fields (array)
     + additional_instructions (string)
@@ -730,7 +798,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Creative Minimal (object)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/campaign_approvals/1 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/campaign_approvals/1 (string)
 + id: 1 (number) - Creative's Id
 + created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the creative was created
 + description: This is the creative's description (string) - Description of the creative
@@ -750,10 +818,28 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + image (string) URL to the creative's banner image (Banner type only)
 + text (string) Text version of the creative (Email type only)
 
+## Phone Number Base (object)
++ `_links` (object)
+    + self
+        + href: https://affiliate.api.diablomedia.com/v1/phone_numbers/1 (string)
++ id: 1 (number) - Phone Number's Id
++ number: `+15551234567` (string) - The phone number itself
+
+## Phone Number Minimal (Phone Number Base)
+
+## Phone Number Lite (Phone Number Minimal)
+
+## Phone Number Full (Phone Number Lite)
++ `_embedded` (object)
+    + campaign (Campaign Minimal) - The campaign the phone number is linked to
+
+## Phone Number Full Sid (Phone Number Full)
++ sid: abc123 (string) - The sid value that will be attributed to calls made with this phone number
+
 ## Pixel Base (object)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/campaign_approvals/1 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/pixels/1 (string)
 + created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the pixel was created
 + id: 1 (number) - Pixel's Id
 + pixel: https://test.com (string, required) - The content of the pixel (either the URL for "url" types, or the HTML content for "html" types)
@@ -774,7 +860,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Campaign Approval Minimal (object)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/campaign_approvals/1 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/campaign_approvals/1 (string)
 + id: 1 (number) - Approval Id
 + created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the approval was created
 + status: pending (string) - Approval's status (Approved, Pending, Declined, Deleted)
@@ -831,7 +917,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Contact Lite (Contact Base)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/contacts/1 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/contacts/1 (string)
 
 ## Contact Full (Contact Lite)
 + address2: Apt 102 (string, optional) - Second line of Contact's Street Address
@@ -853,7 +939,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Country Full (Country Base)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/countries/US (string)
+        + href: https://affiliate.api.diablomedia.com/v1/countries/US (string)
 
 ## Message Base (object)
 + id: 1 (number) - Message ID
@@ -870,7 +956,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Message Lite (Message Base)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/messages/1 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/messages/1 (string)
 
 ## Message Full (Message Lite)
 + content: <b>HTML content of message</b> (string) - The full content of the message (can contain HTML)
@@ -887,7 +973,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Publisher Lite (Publisher Base)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/publishers/10000 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/publishers/10000 (string)
 + `_embedded` (object)
     + categories (array[Category Full]) - Offer Categories Publisher is interested in
     + traffic_types (array[Traffic Type Full]) - Traffic Types Publisher is capable of running
@@ -895,7 +981,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Publisher Full (Publisher Base)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/publishers/10000 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/publishers/10000 (string)
 + `_embedded` (object)
     + categories (array[Category Full]) - Offer Categories Publisher is interested in
     + traffic_types (array[Traffic Type Full]) - Traffic Types Publisher is capable of running
@@ -930,7 +1016,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Manager Full (Manager Base)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/publishers/10000/manager (string)
+        + href: https://affiliate.api.diablomedia.com/v1/publishers/10000/manager (string)
 
 ## Transaction Base (object)
 + `_embedded` (object)
@@ -950,7 +1036,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Transaction Full (Transaction Base)
 + `_links` (object)
     + self
-        + href: https://affiliate.api.diablomedia.com/transactions/L1 (string)
+        + href: https://affiliate.api.diablomedia.com/v1/transactions/L1 (string)
 
 ## Summary Report Row (object)
 + _embedded (object, optional)
