@@ -89,6 +89,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### View Campaign List [GET]
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Campaigns Collection)
 
@@ -103,6 +108,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Attributes (Campaign Approval Full)
 
 ### View a Campaign Approval Detail [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Campaign Approval Full)
@@ -129,16 +139,26 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Parameters
   + page: 1 (optional, number) - Page number of results
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Campaign Approval Collection)
 
 ### Make an Approval Request [POST]
 
 + Request (application/json)
+    + Headers
 
-        {
-            "campaign_id": 2
-        }
+            Accept: application/json
+
+    + Body
+
+            {
+                "campaign_id": 2
+            }
 
 + Response 200 (application/hal+json)
     + Headers
@@ -149,10 +169,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 # Group Categories
 
-## Category Collection [/v1/categories{?publisher_id}]
-
-+ Parameters
-    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+## Category Collection [/v1/categories]
 
 + Attributes
     + count: 1 (number) - Number of results in this response
@@ -165,28 +182,48 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### List Categories [GET]
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Category Collection)
 
 # Group Contacts
 
-## Contact Resource [/v1/contacts/{contact_id}{?publisher_id}]
+## Contact Resource [/v1/contacts/{contact_id}]
 
 + Attributes (Contact Full)
 
 + Parameters
     + contact_id: 1 (required, number) - ID of the Contact
-    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
 
 ### View a Contact Detail [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Contact Full)
 
 ### Update a Contact [PUT]
 
-+ Request (application/json)
-    + Attributes (Contact Writable)
++ Request
+    + Headers
+
+            Content-type: application/json
+            Accept: application/json
+
+    + Body
+
+            {
+                "id": 1,
+                "first_name": "New",
+                "last_name": "Name"
+            }
 
 + Response 200 (application/hal+json)
     + Attributes (Contact Full)
@@ -210,15 +247,17 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### View a Contact List [GET]
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Contacts Collection)
 
 # Group Countries
 
-## Country Collection [/v1/countries{?publisher_id}]
-
-+ Parameters
-    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+## Country Collection [/v1/countries]
 
 + Attributes
     + count: 1 (number) - Number of results in this response
@@ -234,6 +273,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### List Countries [GET]
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Country Collection)
 
@@ -246,6 +290,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Attributes (Country Full)
 
 ### View a Country Detail [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Country Resource)
@@ -261,6 +310,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
 
 ### View a Creative Detail [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Creative Full)
@@ -286,6 +340,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
         + creatives (array[Creative Lite])
 
 ### View Creative List [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Creatives Collection)
@@ -313,17 +372,27 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### View a Message Detail [GET]
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Message Resource)
 
 ### Mark a Message as Read [PUT]
 
 + Request (application/json)
+    + Headers
 
-        {
-            "id": 1,
-            "read": true
-        }
+            Accept: application/json
+
+    + Body
+
+            {
+                "id": 1,
+                "read": true
+            }
 
 + Response 200 (application/hal+json)
     + Attributes (Message Resource)
@@ -352,6 +421,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### List Messages [GET]
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Message Collection)
 
@@ -366,6 +440,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
 
 ### View a Phone Number Detail [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Phone Number Full)
@@ -397,12 +476,22 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + campaign: 1 (optional, number) - Filter the results by campaign id
     + page: 1 (optional, number) - The page of phone numbers to return
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Phone Number Collection)
 
 ### Add Phone Numbers [POST]
 
 + Request Add a Phone Number (application/json)
+    + Headers
+
+            Accept: application/json
+
+    + Body
 
             {
                 "campaign_id": 1
@@ -412,6 +501,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + Attributes (Phone Number Full)
 
 + Request Add a Phone Number with Sid (application/json)
+    + Headers
+
+            Accept: application/json
+
+    + Body
 
             {
                 "campaign_id": 1,
@@ -433,17 +527,27 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### View a Pixel Detail [GET]
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
 
 ### Update a Pixel [PUT]
 
 + Request (application/json)
+    + Headers
 
-        {
-            "pixel": "http://test.com",
-            "version": 1
-        }
+            Accept: application/json
+
+    + Body
+
+            {
+                "pixel": "http://test.com",
+                "version": 1
+            }
 
 
 + Response 200 (application/hal+json)
@@ -479,12 +583,23 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + sort: id (optional, string) - Sort the results by this field, prepend with a dash (-) to reverse the sort direction
     + type: url (optional, string) - Filter the results by pixel type (url or html)
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Pixels Collection)
 
 ### Adding Pixels [POST]
 
-+ Request Add a Global Pixel (application/json)
++ Request Add a Global Pixel
+    + Headers
+
+            Accept: application/json
+            Content-type: application/json
+
+    + Body
 
             {
                 "pixel": "http://test.com"
@@ -494,6 +609,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + Attributes (Pixel Full Global)
 
 + Request Add a Campaign Pixel (application/json)
+    + Headers
+
+            Accept: application/json
+
+    + Body
 
             {
                 "pixel": "http://test.com",
@@ -505,15 +625,19 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 # Group Publishers
 
-## Publisher Resource [/v1/publishers/{id}{?publisher_id}]
+## Publisher Resource [/v1/publishers/{id}]
 
 + Parameters
     + id: 10001 (number, required) - The ID of the Publisher you want to view
-    + publisher_id: 10000 (number, required) - ID of the Publisher account you are working as
 
 + Attributes (Publisher Full)
 
 ### View a Publisher Detail [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Publisher Full)
@@ -524,13 +648,17 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + id: 10000
 
 + Request (application/json)
+    + Headers
 
-        {
-            "id": 10000,
-            "version": 1,
-            "website": "https://test.com"
-        }
+            Accept: application/json
 
+    + Body
+
+            {
+                "id": 10000,
+                "version": 1,
+                "website": "https://test.com"
+            }
 
 + Response 200 (application/hal+json)
     + Attributes (Publisher Full)
@@ -544,6 +672,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Attributes (Manager Full)
 
 ### View a Manager Detail [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Publisher Manager Resource)
@@ -579,6 +712,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + start: `2015-01-01` (string, required) - Start date of the date range to get summary data for
 
 ### Fetch Summary Data [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes
@@ -635,15 +773,17 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### Export Summary Data [GET]
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (text/csv;charset=UTF-8)
 
 
 # Group Traffic Types
 
-## Traffic Type Collection [/v1/traffic_types{?publisher_id}]
-
-+ Parameters
-    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+## Traffic Type Collection [/v1/traffic_types]
 
 + Attributes
     + count: 1 (number) - Number of results in this response
@@ -658,6 +798,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
         + `traffic_types` (array[Traffic Type Full])
 
 ### List Traffic Types [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Traffic Type Collection)
@@ -696,6 +841,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### List Transactions [GET]
 
++ Request
+    + Headers
+
+            Accept: application/json
+
 + Response 200 (application/hal+json)
     + Attributes (Transaction Collection)
 
@@ -717,8 +867,12 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### Export Transactions [GET]
 
-+ Response 200 (text/csv;charset=UTF-8)
++ Request
+    + Headers
 
+            Accept: application/json
+
++ Response 200 (text/csv;charset=UTF-8)
 
 ## Transaction Resource [/v1/transactions/{transaction_id}{?publisher_id}]
 
@@ -729,6 +883,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + Attributes (Transaction Full)
 
 ### View a Transaction Detail [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
 
 + Response 200 (application/hal+json)
     + Attributes (Transaction Resource)
@@ -807,7 +966,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + id: 1 (number) - Creative's Id
 + created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the creative was created
 + description: This is the creative's description (string) - Description of the creative
-+ type: Basic (string) - They creative's type ("Basic", "Email", "HTML", "Banner")
++ type: Basic (string) - The creative's type ("Basic", "Email", "HTML", "Banner")
 
 ## Creative Lite (Creative Minimal)
 + `_embedded` (object)
@@ -860,7 +1019,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ## Pixel Full Global (Pixel Base)
 + global: true (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
-+ `_embedded`: {} (object)
++ `_embedded` (object)
 
 ## Campaign Approval Minimal (object)
 + `_links` (object)
@@ -897,7 +1056,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + email: test@test.com (string) - Contact's Email Address
 + first_name: John (string) - Contact's First Name
 + last_name: Doe (string) - Contact's Last Name
-+ phone: 123-555-1234 (string) - Contact's Phone Number
++ phone: `123-555-1234` (string) - Contact's Phone Number
 + type: Primary (string) - The type of contact at the company (Executive, Primary, Technical, Accounting, etc...)
 + version: 1 (number) - The version number of this record, increments when the record is updated.
 
@@ -907,14 +1066,21 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + birthday: 05/31 (string, optional) - Month/Day of contact's birthday
 + city: Anycity (string, optional) - City of Street Address
 + country: US (string, optional) - Country of Street Address
-+ fax: 123-555-1234 (string, optional) - Contact's Fax number
++ fax: `123-555-1234` (string, optional) - Contact's Fax number
 + first_name: John (string, optional) - Contact's first name
 + id: 1 (number, required) - Contact's Id
 + last_name: Doe (string, optional) - Contact's last name
-+ messaging: {'msn': '', 'aim': '', 'skype': '', 'yim': '', 'twitter': '', 'icq': '', 'linkedin': ''} (object, optional) - Contact's messaging accounts
-+ mobile_phone: 123-555-2134 (string, optional) - Contact's mobile phone number
++ messaging (object, optional) - Contact's messaging accounts
+    + msn: msn@msn.com (string, optional)
+    + aim: aimaccount (string, optional)
+    + skype: skypeaccount (string, optional)
+    + yim: yimaccount (string, optional)
+    + twitter: @twitterhandle (string, optional)
+    + icq: 203003335 (string, optional)
+    + linkedin: linkedinprofile (string, optional)
++ mobile_phone: `123-555-2134` (string, optional) - Contact's mobile phone number
 + password: abc123pass (string, optional) - Update/set the password used to login
-+ phone: 123-555-2233 (string, optional) - Contact's phone number
++ phone: `123-555-2233` (string, optional) - Contact's phone number
 + postal_code: 90210 (string, optional) - Postal Code of Street Address
 + region: CA (string, optional) - State/Province/Region of Street Address
 + version: 1 (number, required) - The version of the record at the time of retrieval
@@ -930,10 +1096,10 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 + birthday: 05/31 (string, optional) - Contact's Birthday in MM/DD format
 + city: Anycity (string, optional) - City of Contact's Street Address
 + country: US (string, optional) - Country of Contact's Street Address
-+ fax: 123-555-1234 (string, optional) - Contact's Fax number
++ fax: `123-555-1234` (string, optional) - Contact's Fax number
 + has_password: false (boolean) - Whether or not Contact has a password set
 + messaging (object) - Object containing Contact's different IM messaging account names (MSN, AIM, YIM, Skype, etc...)
-+ mobile_phone: 123-555-1234 (string, optional) - Contact's mobile phone number
++ mobile_phone: `123-555-1234` (string, optional) - Contact's mobile phone number
 + postal_code: 12345 (string, optional) - Contact's Street Address postal code
 + region: NY (string, optional) - Region part of Contact's Street Address
 
@@ -1007,7 +1173,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Manager Base (object)
 + id: 1 (number) - Manager's Id
 + email: test@test.com (string) - Manager's Email address
-+ fax: 123-555-1234 (string) - Manager's Fax number
++ fax: `123-555-1234` (string) - Manager's Fax number
 + first_name: Jane (string) - Manager's first name
 + last_name: Manager (string) - Manager's last name
 + messaging (object) - Object of different messaging accounts to contact Manager
@@ -1015,8 +1181,8 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + linkedin: jane123 (string) - LinkedIn name
     + twitter: @jane123 (string) - Twitter handle
     + skype: jane123 (string) - Skype name
-+ mobile: 123-555-3030 (string) - Manager's mobile phone number
-+ phone: 123-555-3232 (string) - Manager's phone number
++ mobile: `123-555-3030` (string) - Manager's mobile phone number
++ phone: `123-555-3232` (string) - Manager's phone number
 
 ## Manager Full (Manager Base)
 + `_links` (object)
