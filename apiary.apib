@@ -5,7 +5,7 @@ HOST: https://affiliate.api.diablomedia.com
 
 Welcome to the documentation for our Affiliate API. We've designed this API to give you, the affiliate, programmatic access to all of the functionality of our affiliate interface. In other words, we dog-food this API as it's the same API that we use in our [Affiliate User Interface](https://affiliate.diablomedia.com). Anything that we do in our Affiliate UI, you can do with this API with your own integrations.
 
-After the "Authentication" section below, each group is broken out to the different types of "resources" that we provide through the API. Generally each resource type has a "Collection" endpoint and a "Resource" endpoint. Collections will be a list of objects of that type, and a Resource is a single object of that type. Browse to the section that you're interested in to see sample requests and responses. Usually the Collection response for a resource type will contain less properties than the Resource response would, this is done to reduce how much data is collected and returned over the wire for each request. The sample responses for each resource type indicate which properties we return for the Collection vs. Resource requests for an object.
+After the "Authentication" section below, each group is broken out to the different types of "resources" that we provide through the API. Generally each resource type has a "Collection" endpoint and a "Resource" endpoint. Collections will be a list of objects of that type, and a Resource is a single object of that type. Browse to the section that you're interested in to see sample requests and responses. The resource types in a Collection response typically contain less properties than the corresponding Resource response, to reduce how much data is returned over the wire for each request. The sample responses for each resource type indicate which properties we return for the Collection vs. Resource requests for an object.
 
 This is a REST JSON API, so all requests must send the `Accept: application/json` header in order for the API to respond with an expected response (the "Try Now" functionality of this documentation should do this for sample requests).
 
@@ -25,13 +25,14 @@ You must have an API token to make requests against this API. Use our [affiliate
 
 This method is the most secure, because it keeps your token out of the request's query string (which can end up in proxy logs). Add your token to the `Authorization Header` as demonstrated below (replace xxxxxxxxxxxxxxxxxxx with your token):
 
-  Authorization: Bearer xxxxxxxxxxxxxxxxxxx
+  `Authorization: Bearer xxxxxxxxxxxxxxxxxxx`
 
 ## Query String Parameter
 
 If the header option isn't possible with your integration, this method is supported as well. Simply add your token as a query string parameter to the request's URL (replace xxxxxxxxxxxxxxxxxxx with your token):
 
-  https://affiliate.api.diablomedia.com/v1/campaigns?publisher_id=10000&access_token=xxxxxxxxxxxxxxxxxxx
+`https://affiliate.api.diablomedia.com/v1/campaigns?publisher_id=10000&access_token=xxxxxxxxxxxxxxxxxxx`
+  
 
 # Group Campaigns
 
