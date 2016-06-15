@@ -27,6 +27,8 @@ This method is the most secure, because it keeps your token out of the request's
 
   `Authorization: Bearer xxxxxxxxxxxxxxxxxxx`
 
+In the examples in this documentation we use "pleaseinsertyourtokenhere" as the token placeholder. If you use the "Try" functionality of these docs, you'll need to replace that text with your actual token to get a real response from our server.
+
 ## Query String Parameter
 
 If the header option isn't possible with your integration, this method is supported as well. Simply add your token as a query string parameter to the request's URL (replace xxxxxxxxxxxxxxxxxxx with your token):
@@ -35,13 +37,13 @@ If the header option isn't possible with your integration, this method is suppor
 
 ## Account Access
 
-Tokens are assigned to a User Account (also called a Contact), which means that a single account may have access to several Publisher accounts in our system if your Contact record is linked to more than one Publisher. Because of this, most of the API requests require that a `publisher_id` query string parameter is added to the request so that we know which Publisher account the request is for. In the example requests below we've signified if the `publisher_id` query string parameter is required or not (if it's not passed for these requests, you'll receive a `401` error response).
+Tokens are assigned to a User Account (also called a Contact), which means that a single account may have access to several Publisher accounts in our system if your Contact record is linked to more than one Publisher. Because of this, most of the API requests require that a `publisher_id` query string parameter is added to the request so that we know which Publisher account the request is for. In the example requests below we've denoted if the `publisher_id` query string parameter is required or not (if it's not passed for these requests, you'll receive a `401` error response).
 
 # Group Campaigns
 
 ## Campaign Resource [/v1/campaigns/{campaign_id}{?publisher_id}]
 
-Returns a full detail for the campaign specified in the URL.
+Returns a full record for the campaign specified in the URL.
 
 + Attributes (Campaign Full)
 
@@ -55,6 +57,7 @@ Returns a full detail for the campaign specified in the URL.
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Campaign Full)
@@ -69,17 +72,27 @@ This endpoint will return a ZIP file of all of this campaign's creatives.
 
 ### Export Creatives [GET]
 
++ Request
+    + Headers
+
+            Authorization: Bearer pleaseinsertyourtokenhere
+
 + Response 200 (application/zip)
 
 ## Campaign Suppression Download [/v1/campaigns/{campaign_id}/suppression{?publisher_id}]
 
-This endpoint will redirect the request to the suppression file download location for this campaign (if applicable).
+This endpoint will redirect the request to the suppression file download location for this campaign (if applicable), and log the download in our system.
 
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
     + campaign_id: 1 (required, number) - ID of the Campaign to download the suppression file for
 
 ### Download Suppression File [GET]
+
++ Request
+    + Headers
+
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 302
     + Headers
@@ -94,7 +107,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + category: test (optional, string) - The slug of a category (or categories separated by commas) to filter the results by
     + country: US (optional, string) - The "code" of a country (or several countries, separated by commas) to filter by
     + page: 1 (optional, number) - The page of campaigns to return
-    + payout_type: cpa (optional, string) - Filter the results by campaign payout type, separate several options with a comma
+    + payout_type: cpa (optional, enum[string]) - Filter the results by campaign payout type, separate several options with a comma
         + Members
             + cpa
             + cpc
@@ -102,12 +115,12 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
     + sort: name (optional, string) - Sort the results by this field, prepend with a dash (-) to reverse the sort direction
     + traffic_type: email (optional, string) - Filter the results by campaign traffic type slug (separate by a comma to filter by multiple traffic types)
-    + type: standard (optional, string) - Filter the results by campaign type, separate several options with a comma
+    + type: standard (optional, enum[string]) - Filter the results by campaign type, separate several options with a comma
         + Members
             + standard
             + paypercall
             + coreg
-    + visibility: all (optional, string) - Filter the results by visibility
+    + visibility: all (optional, enum[string]) - Filter the results by visibility
         + Members
             + all
             + approved
@@ -120,10 +133,10 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + total: 2 (number) - Total number of results available
     + `_links` (object)
         + self (object)
-            + href: https://affiliate.api.diablomedia.com/v1/campaigns?page=1 (string)
-            + first: https://affiliate.api.diablomedia.com/v1/campaigns (string)
-            + last: https://affiliate.api.diablomedia.com/v1/campaigns?page=2 (string)
-            + next: https://affiliate.api.diablomedia.com/v1/campaigns?page=2 (string)
+            + href: https://affiliate.api.diablomedia.com/v1/campaigns?page=1&publisher_id=10000 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/campaigns?publisher_id=10000 (string)
+            + last: https://affiliate.api.diablomedia.com/v1/campaigns?page=2&publisher_id=10000 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/campaigns?page=2&publisher_id=10000 (string)
     + `_embedded` (object)
         + campaigns (array[Campaign Lite])
 
@@ -133,6 +146,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Campaigns Collection)
@@ -157,6 +171,7 @@ Use this endpoint to view existing approval requests that you've made.
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Campaign Approval Full)
@@ -171,14 +186,16 @@ Use this endpoint to view existing approval requests that you've made.
     + total: 2 (number) - Total number of results available
     + `_links` (object)
         + self (object)
-            + href: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=1 (string)
-            + first: https://affiliate.api.diablomedia.com/v1/campaign_approvals (string)
-            + last: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
-            + next: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2 (string)
+            + href: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=1&publisher_id=10000 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/campaign_approvals?publisher_id=10000 (string)
+            + last: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2&publisher_id=10000 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/campaign_approvals?page=2&publisher_id=10000 (string)
     + `_embedded` (object)
         + `campaign_approvals` (array[Campaign Approval Full])
 
 ### List Campaign Approvals [GET]
+
+List all campaign approval requests for this publisher.
 
 + Parameters
   + page: 1 (optional, number) - Page number of results
@@ -187,6 +204,7 @@ Use this endpoint to view existing approval requests that you've made.
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Campaign Approval Collection)
@@ -199,6 +217,8 @@ If you are not yet authorized to run a campaign (the campaign's `approval_status
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
+            Content-type: application/json
 
     + Body
 
@@ -215,7 +235,7 @@ If you are not yet authorized to run a campaign (the campaign's `approval_status
 
 # Group Categories
 
-We use categories to classify our campaigns and publishers to help us (and you) find the right campaigns. These categories are used to filter campaigns and can also be assigned to a publisher's "categories" property, showing that the publisher is interested in offers that span those categories.
+We use categories to classify our campaigns and publishers to help us (and you) find campaigns that are a good fit. These categories are used to filter campaigns and can also be assigned to a publisher's "categories" property, showing that the publisher is interested in offers that span those categories.
 
 ## Category Collection [/v1/categories]
 
@@ -234,6 +254,7 @@ We use categories to classify our campaigns and publishers to help us (and you) 
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Category Collection)
@@ -255,17 +276,38 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Contact Full)
 
 ### Update a Contact [PATCH]
 
+The following properties of a Contact record can be updated through this API:
+
+  * address
+  * address2
+  * birthday
+  * city
+  * country
+  * fax
+  * first_name
+  * last_name
+  * messaging
+  * mobile_phone
+  * password
+  * phone
+  * postal_code
+  * region
+
+To update a Contact, issue a PATCH request containing a JSON body with the properties that you want to update, as shown in the example.  The `id` property of the JSON request must match the id of your user account.
+
 + Request
     + Headers
 
             Content-type: application/json
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
     + Body
 
@@ -278,10 +320,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
 + Response 200 (application/hal+json)
     + Attributes (Contact Full)
 
-## Contacts Collection [/v1/contacts{?publisher_id}]
-
-+ Parameters
-    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+## Contacts Collection [/v1/contacts]
 
 + Attributes
     + count: 1 (number) - Number of results in this response
@@ -297,15 +336,20 @@ A "contact" is a user account that is associated to one or many publisher accoun
 
 ### View a Contact List [GET]
 
+This endpoint is provided for consistency, but will only ever return the contact associated with your token.
+
 + Request
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Contacts Collection)
 
 # Group Countries
+
+The country resources are referenced on Campaigns, which signifies which countries the campaign accepts traffic from.
 
 ## Country Collection [/v1/countries]
 
@@ -327,6 +371,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Country Collection)
@@ -345,6 +390,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Country Resource)
@@ -365,6 +411,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Creative Full)
@@ -382,10 +429,10 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + total: 2 (number) - Total number of results available
     + `_links` (object)
         + self (object)
-            + href: https://affiliate.api.diablomedia.com/v1/creatives?page=1 (string)
-            + first: https://affiliate.api.diablomedia.com/v1/creatives (string)
-            + last: https://affiliate.api.diablomedia.com/v1/creatives?page=2 (string)
-            + next: https://affiliate.api.diablomedia.com/v1/creatives?page=2 (string)
+            + href: https://affiliate.api.diablomedia.com/v1/creatives?page=1&publisher_id=10000 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/creatives?publisher_id=10000 (string)
+            + last: https://affiliate.api.diablomedia.com/v1/creatives?page=2&publisher_id=10000 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/creatives?page=2&publisher_id=10000 (string)
     + `_embedded` (object)
         + creatives (array[Creative Lite])
 
@@ -395,6 +442,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Creatives Collection)
@@ -406,6 +454,11 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + publisher_id: 10000 (number, required) - ID of the Publisher account you are working as
 
 ### Export Creative [GET]
+
++ Request
+    + Headers
+
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/zip)
     + Body
@@ -426,16 +479,21 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Message Resource)
 
 ### Mark a Message as Read [PATCH]
 
+To mark a message as read, you need to perform a PATCH request against the message's resource URL and send "true" for the `read` property, as shown in the example.
+
 + Request (application/json)
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
+            Content-type: application/json
 
     + Body
 
@@ -448,6 +506,11 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Attributes (Message Resource)
 
 ### Delete a Message [DELETE]
+
++ Request
+    + Headers
+
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 204
 
@@ -462,10 +525,10 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + total: 2 (number) - Total number of results available
     + `_links` (object)
         + self (object)
-            + href: https://affiliate.api.diablomedia.com/v1/messages?page=1 (string)
-            + first: https://affiliate.api.diablomedia.com/v1/messages (string)
-            + last: https://affiliate.api.diablomedia.com/v1/messages?page=2 (string)
-            + next: https://affiliate.api.diablomedia.com/v1/messages?page=2 (string)
+            + href: https://affiliate.api.diablomedia.com/v1/messages?page=1&publisher_id=10000 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/messages?publisher_id=10000 (string)
+            + last: https://affiliate.api.diablomedia.com/v1/messages?page=2&publisher_id=10000 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/messages?page=2&publisher_id=10000 (string)
     + `_embedded` (object)
         + messages (array[Message Lite])
 
@@ -475,6 +538,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Message Collection)
@@ -495,11 +559,17 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Phone Number Full)
 
 ### Delete a Phone Number [DELETE]
+
++ Request
+    + Headers
+
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 204
 
@@ -513,10 +583,10 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + total: 2 (number) - Total number of results available
     + `_links` (object)
         + self (object)
-            + href: https://affiliate.api.diablomedia.com/v1/phone_numbers?page=1 (string)
-            + first: https://affiliate.api.diablomedia.com/v1/phone_numbers (string)
-            + last: https://affiliate.api.diablomedia.com/v1/phone_numbers?page=2 (string)
-            + next: https://affiliate.api.diablomedia.com/v1/phone_numbers?page=2 (string)
+            + href: https://affiliate.api.diablomedia.com/v1/phone_numbers?page=1&publisher_id=10000 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/phone_numbers?publisher_id=10000 (string)
+            + last: https://affiliate.api.diablomedia.com/v1/phone_numbers?page=2&publisher_id=10000 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/phone_numbers?page=2&publisher_id=10000 (string)
     + `_embedded` (object)
         + phone_numbers (array[Phone Number Lite])
 
@@ -530,6 +600,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Phone Number Collection)
@@ -540,6 +611,8 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
+            Content-type: application/json
 
     + Body
 
@@ -554,6 +627,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
     + Body
 
@@ -581,6 +655,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Pixel Full)
@@ -591,6 +666,8 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
+            Content-type: application/json
 
     + Body
 
@@ -605,6 +682,11 @@ A "contact" is a user account that is associated to one or many publisher accoun
 
 ### Delete a Pixel [DELETE]
 
++ Request
+    + Headers
+
+            Authorization: Bearer pleaseinsertyourtokenhere
+
 + Response 204
 
 ## Pixels Collection [/v1/pixels{?publisher_id}]
@@ -617,10 +699,10 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + total: 2 (number) - Total number of results available
     + `_links` (object)
         + self (object)
-            + href: https://affiliate.api.diablomedia.com/v1/pixels?page=1 (string)
-            + first: https://affiliate.api.diablomedia.com/v1/pixels (string)
-            + last: https://affiliate.api.diablomedia.com/v1/pixels?page=2 (string)
-            + next: https://affiliate.api.diablomedia.com/v1/pixels?page=2 (string)
+            + href: https://affiliate.api.diablomedia.com/v1/pixels?page=1&publisher_id=10000 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/pixels?publisher_id=10000 (string)
+            + last: https://affiliate.api.diablomedia.com/v1/pixels?page=2&publisher_id=10000 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/pixels?page=2&publisher_id=10000 (string)
     + `_embedded` (object)
         + pixels (array[Pixel Full])
 
@@ -631,7 +713,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + global: false (optional, boolean) - Filter the results by their global status
     + page: 1 (optional, number) - The page of pixels to return
     + sort: id (optional, string) - Sort the results by this field, prepend with a dash (-) to reverse the sort direction
-    + type: url (optional, string) - Filter the results by pixel type
+    + type: url (optional, enum[string]) - Filter the results by pixel type
         + Members
             + url
             + html
@@ -640,6 +722,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Pixels Collection)
@@ -651,6 +734,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
 
             Accept: application/json
             Content-type: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
     + Body
 
@@ -665,6 +749,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
     + Body
 
@@ -691,6 +776,7 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Publisher Full)
@@ -704,6 +790,8 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
+            Content-type: application/json
 
     + Body
 
@@ -716,10 +804,9 @@ A "contact" is a user account that is associated to one or many publisher accoun
 + Response 200 (application/hal+json)
     + Attributes (Publisher Full)
 
-## Publisher Manager Resource [/v1/publishers/{id}/manager{?publisher_id}]
+## Publisher Manager Resource [/v1/publishers/{id}/manager]
 
 + Parameters
-    + publisher_id: 10000 (number, required) - ID of the Publisher account you are working as
     + id: 10000 (number, required) - The ID of the Publisher whose manager you want to view
 
 + Attributes (Manager Full)
@@ -730,9 +817,41 @@ A "contact" is a user account that is associated to one or many publisher accoun
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Publisher Manager Resource)
+
+## Publishers Collection [/v1/publishers{?keyword,%21id}]
+
+Lists the publisher records that your account has access to.
+
++ Parameters
+    + keyword: abcdef (optional, string) - Search keyword used to filter Publishers
+    + %21id: 10001,10002 (optional, string) - ID (or IDs separated by commas) of Publishers that should be filtered from the result
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/publishers?page=1 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/publishers (string)
+            + last: https://affiliate.api.diablomedia.com/v1/publishers?page=2 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/publishers?page=2 (string)
+    + `_embedded` (object)
+        + publishers (array[Publisher Lite])
+
+### View Publisher List [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
+
++ Response 200 (application/hal+json)
+    + Attributes (Publishers Collection)
 
 # Group Summary Report
 
@@ -782,6 +901,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes
@@ -804,9 +924,9 @@ There are a lot of filtering capabilities for this report. Most of the columns r
             + data (array[Summary Report Row])
         + _links (object)
             + self
-                + href: https://affiliate.api.diablomedia.com/v1/reports/summary (string) - Self link to the report requested
+                + href: https://affiliate.api.diablomedia.com/v1/reports/summary?publisher_id=10000 (string) - Self link to the report requested
             + export
-                + href: https://affiliate.api.diablomedia.com/v1/reports/summary/export (string) - Link to export this report as CSV data
+                + href: https://affiliate.api.diablomedia.com/v1/reports/summary/export?publisher_id=10000 (string) - Link to export this report as CSV data
 
 ## Summary Report Export [/v1/reports/summary/export{?campaign,calls,click_through,clicks,country,creative,end,epc,group,impressions,leads,publisher_id,revenue,sid,sign_up,sort,start}]
 
@@ -842,6 +962,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (text/csv;charset=UTF-8)
 
@@ -868,11 +989,31 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Traffic Type Collection)
 
 # Group Transactions
+
+## Transaction Resource [/v1/transactions/{transaction_id}{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
+    + transaction_id: L1 (string,required) - Transaction ID to fetch
+
++ Attributes (Transaction Full)
+
+### View a Transaction Detail [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
+
++ Response 200 (application/hal+json)
+    + Attributes (Transaction Resource)
 
 ## Transaction Collection [/v1/transactions{?campaign,country,creative,end,ip,page,publisher_id,sid,sort,start,trx,type}]
 
@@ -888,7 +1029,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + sort: created (string, optional) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start Date of date range, in YYYY-MM-DD format
     + trx: kdkd* (string, optional) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
-    + type: lead (string, optional) - Filter transactions by their type, if not specified, all types are returned
+    + type: lead (enum[string], optional) - Filter transactions by their type, if not specified, all types are returned
         + Members
             + lead
             + click
@@ -899,10 +1040,10 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + total: 2 (number) - Total number of results available
     + `_links` (object)
         + self (object)
-            + href: https://affiliate.api.diablomedia.com/v1/transactions?page=1 (string)
-            + first: https://affiliate.api.diablomedia.com/v1/transactions (string)
-            + last: https://affiliate.api.diablomedia.com/v1/transactions?page=2 (string)
-            + next: https://affiliate.api.diablomedia.com/v1/transactions?page=2 (string)
+            + href: https://affiliate.api.diablomedia.com/v1/transactions?page=1&publisher_id=10000 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/transactions?publisher_id=10000 (string)
+            + last: https://affiliate.api.diablomedia.com/v1/transactions?page=2&publisher_id=10000 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/transactions?page=2&publisher_id=10000 (string)
         + export (object)
             + href: https://affiliate.api.diablomedia.com/v1/transactions/export
     + `_embedded` (object)
@@ -914,6 +1055,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (application/hal+json)
     + Attributes (Transaction Collection)
@@ -932,7 +1074,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + sort: created (string, optional) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start Date of date range, in YYYY-MM-DD format
     + trx: kdkd* (string, optional) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
-    + type: lead (string, optional) - Filter transactions by their type, if not specified, all types are returned
+    + type: lead (enum[string], optional) - Filter transactions by their type, if not specified, all types are returned
         + Members
             + lead
             + click
@@ -944,356 +1086,350 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + Headers
 
             Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
 
 + Response 200 (text/csv;charset=UTF-8)
-
-## Transaction Resource [/v1/transactions/{transaction_id}{?publisher_id}]
-
-+ Parameters
-    + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
-    + transaction_id: L1 (string,required) - Transaction ID to fetch
-
-+ Attributes (Transaction Full)
-
-### View a Transaction Detail [GET]
-
-+ Request
-    + Headers
-
-            Accept: application/json
-
-+ Response 200 (application/hal+json)
-    + Attributes (Transaction Resource)
 
 # Data Structures
 
 ## Campaign Base (object)
-+ id: 1 (number) - Campaign's Id
-+ name: Campaign Name (string) - Campaign's Name
-+ status: active (string) Campaign's Status ("active", "inactive")
-+ thumbnail (string) URL to campaign's thumbnail image
+- id: 1 (number) - Campaign's Id
+- name: Campaign Name (string) - Campaign's Name
+- status: active, inactive (enum) Campaign's Status ("active", "inactive")
+- thumbnail (string) URL to campaign's thumbnail image
 
 ## Campaign Report Base (object)
-+ id: 1 (number) - Campaign's Id
-+ name: Campaign Name (string) - Campaign's Name
-+ payout_type: CPA (string) - The payout type of the campaign (CPA, CPC, RevShare)
-+ type: Standard (string) - Type of campaign (Standard, PayPerCall, CoReg)
-+ status: active (string) Campaign's Status ("active", "inactive")
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1 (string)
+- id: 1 (number) - Campaign's Id
+- name: Campaign Name (string) - Campaign's Name
+- payout_type: CPA, CPC, RevShare (enum) - The payout type of the campaign (CPA, CPC, RevShare)
+- type: Standard, PayPerCall, CoReg (enum) - Type of campaign (Standard, PayPerCall, CoReg)
+- status: active, inactive (enum) Campaign's Status ("active", "inactive")
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/campaigns/1?publisher_id=10000 (string)
 
 ## Campaign Minimal (Campaign Base)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1 (string)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/campaigns/1?publisher_id=10000 (string)
 
 ## Campaign Lite Base (Campaign Base)
-+ `approval_status`: approved (string) - Approval Status of campaign ['approved','pending','denied','not_approved']
-+ categories: [] (array[Category Base]) - Array of category objects
-+ created: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when the campaign was created
-+ description (string) - Campaign description, may contain HTML
-+ epc: 1.00 (number) - Publisher's EPC for this campaign
-+ payout: 5.00 (number) - The payout amount for this campaign (dollar amount for CPA/CPC campaigns, percentage for RevShare)
-+ payout_type: CPA (string) - The payout type of the campaign (CPA, CPC, RevShare)
-+ traffic_types: [] (array[Traffic Type Base]) - Array of traffic type objects
-+ type: Standard (string) - Type of campaign (Standard, PayPerCall, CoReg)
-+ url: https://test.com (string) - URL of the offer's home page
+- `approval_status`: approved (string) - Approval Status of campaign ['approved','pending','denied','not_approved']
+- categories: [] (array[Category Base]) - Array of category objects
+- created: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when the campaign was created
+- description (string) - Campaign description, may contain HTML
+- epc: 1.00 (number) - Publisher's EPC for this campaign
+- payout: 5.00 (number) - The payout amount for this campaign (dollar amount for CPA/CPC campaigns, percentage for RevShare)
+- payout_type: CPA (string) - The payout type of the campaign (CPA, CPC, RevShare)
+- traffic_types: [] (array[Traffic Type Base]) - Array of traffic type objects
+- type: Standard, PayPerCall, CoReg (enum) - Type of campaign (Standard, PayPerCall, CoReg)
+- url: https://test.com (string) - URL of the offer's home page
 
 ## Campaign Lite (Campaign Lite Base)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1 (string)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/campaigns/1?publisher_id=10000 (string)
 
 ## Campaign Full (Campaign Lite Base)
-+ `_embedded` (object)
-    + creatives (array[Creative Minimal]) - Low density view of Campaign's creatives
-    + pixels (array[Pixel Minimal]) - Low density view of Campaign's third party pixels for this publisher
-    + countries (array[Country Full]) - Array of country objects
-    + `phone_numbers` (array[Phone Number Minimal], optional) - Phone numbers this publisher has created for this campaign (PayPerCall only)
-+ `_links` (object)
-    + `creatives_export`
-        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1/creatives_export (string)
-    + suppression
-        + href: https://affiliate.api.diablomedia.com/v1/campaigns/1/suppression (string)
-+ coreg (object, optional) - If campaign is CoReg type, this will contain posting fields and instructions
-    + fields (array)
-    + additional_instructions (string)
-    + posting_url (string)
-    + sample_url (string)
-+ `from_lines`: [] (array) - Array of approved Email "from" lines
-+ `phone_number_limit`: 5 (number, optional) - The limit of static phone numbers this publisher is allowed to have on this campaign (PayPerCall only)
-+ `pixel_type`: cookie (string) - The pixel type this campaign uses (either "cookie" or "server_to_server")
-+ `subject_lines`: [] (array) - Array of approved Email Subject Lines for this campaign
-+ suppression (object)
-    + `last_download`: `2010-11-05T16:01:54+00:00` (string, nullable) - An ISO8601 date when the suppression file was last downloaded by this publisher
-    + `last_upload`: `2010-11-05T16:01:54+00:00` (string, nullable) - An ISO8601 date when a new suppression file was last uploaded
+- `_embedded` (object)
+    - creatives (array[Creative Minimal]) - Low density view of Campaign's creatives
+    - pixels (array[Pixel Minimal]) - Low density view of Campaign's third party pixels for this publisher
+    - countries (array[Country Full]) - Array of country objects
+    - `phone_numbers` (array[Phone Number Minimal], optional) - Phone numbers this publisher has created for this campaign (PayPerCall only)
+- `_links` (object)
+    - `creatives_export`
+        - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/creatives_export?publisher_id=10000 (string)
+    - suppression
+        - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/suppression?publisher_id=10000 (string)
+- coreg (object, optional) - If campaign is CoReg type, this will contain posting fields and instructions
+    - fields (array)
+    - additional_instructions (string)
+    - posting_url (string)
+    - sample_url (string)
+- `from_lines`: [] (array) - Array of approved Email "from" lines
+- `phone_number_limit`: 5 (number, optional) - The limit of static phone numbers this publisher is allowed to have on this campaign (PayPerCall only)
+- `pixel_type`: cookie, server_to_server (enum) - The pixel type this campaign uses (either "cookie" or "server_to_server")
+- `subject_lines`: [] (array) - Array of approved Email Subject Lines for this campaign
+- suppression (object)
+    - `last_download`: `2010-11-05T16:01:54+00:00` (string, nullable) - An ISO8601 date when the suppression file was last downloaded by this publisher
+    - `last_upload`: `2010-11-05T16:01:54+00:00` (string, nullable) - An ISO8601 date when a new suppression file was last uploaded
 
 ## Creative Report Base (object)
-+ id: 1 (number) - Creative's Id
+- id: 1 (number) - Creative's Id
 
 ## Creative Minimal (object)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/campaign_approvals/1 (string)
-+ id: 1 (number) - Creative's Id
-+ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the creative was created
-+ description: This is the creative's description (string) - Description of the creative
-+ type: Basic (string) - The creative's type ("Basic", "Email", "HTML", "Banner")
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/campaign_approvals/1?publisher_id=10000 (string)
+- id: 1 (number) - Creative's Id
+- created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the creative was created
+- description: This is the creative's description (string) - Description of the creative
+- type: Basic, Email, HTML, Banner (enum) - The creative's type ("Basic", "Email", "HTML", "Banner")
 
 ## Creative Lite (Creative Minimal)
-+ `_embedded` (object)
-    + campaign (Campaign Minimal) - The campaign the creative is linked to
-+ size (object, optional) - The creative's width and height (Banner and HTML types only)
-    + width: 468 (number)
-    + height: 60 (number)
-+ thumbnail (string) - URL to the creative's thumbnail image
-+ url (string) - Publisher's URL for this creative (Basic and Banner types only)
+- `_embedded` (object)
+    - campaign (Campaign Minimal) - The campaign the creative is linked to
+- size (object, optional) - The creative's width and height (Banner and HTML types only)
+    - width: 468 (number)
+    - height: 60 (number)
+- thumbnail (string) - URL to the creative's thumbnail image
+- url (string) - Publisher's URL for this creative (Basic and Banner types only)
 
 ## Creative Full (Creative Lite)
-+ html (string) The HTML body of the creative (HTML, Banner and Email types only)
-+ image (string) URL to the creative's banner image (Banner type only)
-+ text (string) Text version of the creative (Email type only)
+- html (string) The HTML body of the creative (HTML, Banner and Email types only)
+- image (string) URL to the creative's banner image (Banner type only)
+- text (string) Text version of the creative (Email type only)
 
 ## Phone Number Base (object)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/phone_numbers/1 (string)
-+ id: 1 (number) - Phone Number's Id
-+ number: `+15551234567` (string) - The phone number itself
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/phone_numbers/1?publisher_id=10000 (string)
+- id: 1 (number) - Phone Number's Id
+- number: `+15551234567` (string) - The phone number itself
 
 ## Phone Number Minimal (Phone Number Base)
 
 ## Phone Number Lite (Phone Number Minimal)
 
 ## Phone Number Full (Phone Number Lite)
-+ `_embedded` (object)
-    + campaign (Campaign Minimal) - The campaign the phone number is linked to
+- `_embedded` (object)
+    - campaign (Campaign Minimal) - The campaign the phone number is linked to
 
 ## Phone Number Full Sid (Phone Number Full)
-+ sid: abc123 (string) - The sid value that will be attributed to calls made with this phone number
+- sid: abc123 (string) - The sid value that will be attributed to calls made with this phone number
 
 ## Pixel Base (object)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/pixels/1 (string)
-+ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the pixel was created
-+ id: 1 (number) - Pixel's Id
-+ pixel: https://test.com (string, required) - The content of the pixel (either the URL for "url" types, or the HTML content for "html" types)
-+ type: url (string) - The type of the pixel (either "url" or "html")
-+ version: 1 (number) - The internal version number of this pixel (incremented when pixel is edited)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/pixels/1?publisher_id=10000 (string)
+- created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the pixel was created
+- id: 1 (number) - Pixel's Id
+- pixel: https://test.com (string, required) - The content of the pixel (either the URL for "url" types, or the HTML content for "html" types)
+- type: url, html (enum) - The type of the pixel (either "url" or "html")
+- version: 1 (number) - The internal version number of this pixel (incremented when pixel is edited)
 
 ## Pixel Minimal (Pixel Base)
-+ global: false (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
+- global: false (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
 
 ## Pixel Full (Pixel Minimal)
-+ `_embedded` (object)
-    + campaign (Campaign Minimal) - The campaign the pixel is linked to
+- `_embedded` (object)
+    - campaign (Campaign Minimal) - The campaign the pixel is linked to
 
 ## Pixel Full Global (Pixel Base)
-+ global: true (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
-+ `_embedded` (object)
+- global: true (boolean) - Whether or not the pixel is global (fires for all compatible campaigns)
+- `_embedded` (object)
 
 ## Campaign Approval Minimal (object)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/campaign_approvals/1 (string)
-+ id: 1 (number) - Approval Id
-+ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the approval was created
-+ status: pending (string) - Approval's status (Approved, Pending, Declined, Deleted)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/campaign_approvals/1?publisher_id=10000 (string)
+- id: 1 (number) - Approval Id
+- created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the approval was created
+- status: pending (string) - Approval's status (Approved, Pending, Declined, Deleted)
 
 ## Campaign Approval Lite (Campaign Approval Minimal)
 
 ## Campaign Approval Full (Campaign Approval Minimal)
-+ `_embedded` (object)
-    + campaign (Campaign Minimal) - The campaign the approval is for
+- `_embedded` (object)
+    - campaign (Campaign Minimal) - The campaign the approval is for
 
 ## Category Base (object)
-+ id: 1 (number) - Category Id
-+ name: Category (string) - Category's Name
-+ slug: category (string) - Category's Name to be used in URLs
+- id: 1 (number) - Category Id
+- name: Category (string) - Category's Name
+- slug: category (string) - Category's Name to be used in URLs
 
 ## Category Full (Category Base)
-+ `_links` (array)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/categories/1?publisher_id=10000 (string)
 
 ## Traffic Type Base (object)
-+ id: 1 (number) - Traffic Type Id
-+ name: Category (string) - Traffic Type's Name
-+ slug: category (string) - Traffic Type's Name to be used in URLs
+- id: 1 (number) - Traffic Type Id
+- name: Category (string) - Traffic Type's Name
+- slug: category (string) - Traffic Type's Name to be used in URLs
 
 ## Traffic Type Full (Traffic Type Base)
-+ `_links` (array)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/traffic_types/1?publisher_id=10000 (string)
 
 ## Contact Base (object)
-+ id: 1 (number) - Contact Id
-+ email: test@test.com (string) - Contact's Email Address
-+ first_name: John (string) - Contact's First Name
-+ last_name: Doe (string) - Contact's Last Name
-+ phone: `123-555-1234` (string) - Contact's Phone Number
-+ type: Primary (string) - The type of contact at the company (Executive, Primary, Technical, Accounting, etc...)
-+ version: 1 (number) - The version number of this record, increments when the record is updated.
+- id: 1 (number) - Contact Id
+- email: test@test.com (string) - Contact's Email Address
+- first_name: John (string) - Contact's First Name
+- last_name: Doe (string) - Contact's Last Name
+- phone: `123-555-1234` (string) - Contact's Phone Number
+- type: Primary (string) - The type of contact at the company (Executive, Primary, Technical, Accounting, etc...)
+- version: 1 (number) - The version number of this record, increments when the record is updated.
 
 ## Contact Writable (object)
-+ address: 123 Main St. (string, optional) - First line of Street Address
-+ address2: Apt 102 (string, optional) - Second line of Street Address
-+ birthday: 05/31 (string, optional) - Month/Day of contact's birthday
-+ city: Anycity (string, optional) - City of Street Address
-+ country: US (string, optional) - Country of Street Address
-+ fax: `123-555-1234` (string, optional) - Contact's Fax number
-+ first_name: John (string, optional) - Contact's first name
-+ id: 1 (number, required) - Contact's Id
-+ last_name: Doe (string, optional) - Contact's last name
-+ messaging (object, optional) - Contact's messaging accounts
-    + msn: msn@msn.com (string, optional)
-    + aim: aimaccount (string, optional)
-    + skype: skypeaccount (string, optional)
-    + yim: yimaccount (string, optional)
-    + twitter: @twitterhandle (string, optional)
-    + icq: 203003335 (string, optional)
-    + linkedin: linkedinprofile (string, optional)
-+ mobile_phone: `123-555-2134` (string, optional) - Contact's mobile phone number
-+ password: abc123pass (string, optional) - Update/set the password used to login
-+ phone: `123-555-2233` (string, optional) - Contact's phone number
-+ postal_code: 90210 (string, optional) - Postal Code of Street Address
-+ region: CA (string, optional) - State/Province/Region of Street Address
-+ version: 1 (number, required) - The version of the record at the time of retrieval
+- address: 123 Main St. (string, optional) - First line of Street Address
+- address2: Apt 102 (string, optional) - Second line of Street Address
+- birthday: 05/31 (string, optional) - Month/Day of contact's birthday
+- city: Anycity (string, optional) - City of Street Address
+- country: US (string, optional) - Country of Street Address
+- fax: `123-555-1234` (string, optional) - Contact's Fax number
+- first_name: John (string, required) - Contact's first name
+- id: 1 (number, required) - Contact's Id
+- last_name: Doe (string, optional) - Contact's last name
+- messaging (object, optional) - Contact's messaging accounts
+    - msn: msn@msn.com (string, optional)
+    - aim: aimaccount (string, optional)
+    - skype: skypeaccount (string, optional)
+    - yim: yimaccount (string, optional)
+    - twitter: @twitterhandle (string, optional)
+    - icq: 203003335 (string, optional)
+    - linkedin: linkedinprofile (string, optional)
+- mobile_phone: `123-555-2134` (string, optional) - Contact's mobile phone number
+- password: abc123pass (string, optional) - Update/set the password used to login
+- phone: `123-555-2233` (string, optional) - Contact's phone number
+- postal_code: 90210 (string, optional) - Postal Code of Street Address
+- region: CA (string, optional) - State/Province/Region of Street Address
+- version: 1 (number, required) - The version of the record at the time of retrieval
 
 ## Contact Lite (Contact Base)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/contacts/1 (string)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/contacts/1?publisher_id=10000 (string)
 
 ## Contact Full (Contact Lite)
-+ address2: Apt 102 (string, optional) - Second line of Contact's Street Address
-+ address: 123 Main St. (string, optional) - First line of Contact's Street Address
-+ birthday: 05/31 (string, optional) - Contact's Birthday in MM/DD format
-+ city: Anycity (string, optional) - City of Contact's Street Address
-+ country: US (string, optional) - Country of Contact's Street Address
-+ fax: `123-555-1234` (string, optional) - Contact's Fax number
-+ has_password: false (boolean) - Whether or not Contact has a password set
-+ messaging (object) - Object containing Contact's different IM messaging account names (MSN, AIM, YIM, Skype, etc...)
-+ mobile_phone: `123-555-1234` (string, optional) - Contact's mobile phone number
-+ postal_code: 12345 (string, optional) - Contact's Street Address postal code
-+ region: NY (string, optional) - Region part of Contact's Street Address
+- address2: Apt 102 (string, optional) - Second line of Contact's Street Address
+- address: 123 Main St. (string, optional) - First line of Contact's Street Address
+- birthday: 05/31 (string, optional) - Contact's Birthday in MM/DD format
+- city: Anycity (string, optional) - City of Contact's Street Address
+- country: US (string, optional) - Country of Contact's Street Address
+- fax: `123-555-1234` (string, optional) - Contact's Fax number
+- has_password: false (boolean) - Whether or not Contact has a password set
+- messaging (object) - Object containing Contact's different IM messaging account names (MSN, AIM, YIM, Skype, etc...)
+    - msn: msn@msn.com (string, optional)
+    - aim: aimaccount (string, optional)
+    - skype: skypeaccount (string, optional)
+    - yim: yimaccount (string, optional)
+    - twitter: @twitterhandle (string, optional)
+    - icq: 203003335 (string, optional)
+    - linkedin: linkedinprofile (string, optional)
+- mobile_phone: `123-555-1234` (string, optional) - Contact's mobile phone number
+- postal_code: 12345 (string, optional) - Contact's Street Address postal code
+- region: NY (string, optional) - Region part of Contact's Street Address
 
 ## Country Base (object)
-+ id: US (string) - Country's 2 digit ISO Code
-+ name: United States (string) - Country's full name
+- id: US (string) - Country's 2 digit ISO Code
+- name: United States (string) - Country's full name
 
 ## Country Full (Country Base)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/countries/US (string)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/countries/US?publisher_id=10000 (string)
 
 ## Message Base (object)
-+ id: 1 (number) - Message ID
-+ author (object)
-    + first_name: John (string) - Author's first name
-    + last_name: Doe (string) - Author's last name
-    + email: john@test.com (string) - Author's email address
-+ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the message was created
-+ priority: info (string) - Priority level of the message
-+ read: false (boolean) - Whether or not the message has been read
-+ title: Test Message (string) - Title/Subject of the message
-+ type: message (string) - The type of message (can be "message", "promo", "alert", "compliance")
+- id: 1 (number) - Message ID
+- author (object) - Object containing the properties of the Author of the message
+    - first_name: John (string) - Author's first name
+    - last_name: Doe (string) - Author's last name
+    - email: john@test.com (string) - Author's email address
+- created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the message was created
+- priority: info (string) - Priority level of the message
+- read: false (boolean) - Whether or not the message has been read
+- title: Test Message (string) - Title/Subject of the message
+- type: message, promo, alert, compliance (enum) - The type of message (can be "message", "promo", "alert", "compliance")
 
 ## Message Lite (Message Base)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/messages/1 (string)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/messages/1?publisher_id=10000 (string)
 
 ## Message Full (Message Lite)
-+ content: <b>HTML content of message</b> (string) - The full content of the message (can contain HTML)
-+ text_content: Just text content (string) - Text version of the content
+- content: <b>HTML content of message</b> (string) - The full content of the message (can contain HTML)
+- text_content: Just text content (string) - Text version of the content
 
 ## Publisher Base (object)
-+ id: 10000 (number) - Publisher's Id
-+ version: 1 (number) - The version of the record at the time of retrieval
-+ company: Test Publisher (string) - Publisher's Company name
-+ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the publisher was created
-+ primary_contact_id: 1 (number) - The "owning" contact record of this Publisher
-+ website: http://test.com (string) - The Publisher's company website
+- id: 10000 (number) - Publisher's Id
+- version: 1 (number) - The version of the record at the time of retrieval
+- company: Test Publisher (string) - Publisher's Company name
+- created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the publisher was created
+- primary_contact_id: 1 (number) - The "owning" contact record of this Publisher
+- website: http://test.com (string) - The Publisher's company website
 
 ## Publisher Lite (Publisher Base)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/publishers/10000 (string)
-+ `_embedded` (object)
-    + categories (array[Category Full]) - Offer Categories Publisher is interested in
-    + traffic_types (array[Traffic Type Full]) - Traffic Types Publisher is capable of running
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/publishers/10000?publisher_id=10000 (string)
+- `_embedded` (object)
+    - categories (array[Category Full]) - Offer Categories Publisher is interested in
+    - traffic_types (array[Traffic Type Full]) - Traffic Types Publisher is capable of running
 
 ## Publisher Full (Publisher Base)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/publishers/10000 (string)
-+ `_embedded` (object)
-    + categories (array[Category Full]) - Offer Categories Publisher is interested in
-    + traffic_types (array[Traffic Type Full]) - Traffic Types Publisher is capable of running
-    + contacts (array[Contact Lite]) - Contacts linked to this publisher account
-    + manager (Manager Full)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/publishers/10000?publisher_id=10000 (string)
+- `_embedded` (object)
+    - categories (array[Category Full]) - Offer Categories Publisher is interested in
+    - traffic_types (array[Traffic Type Full]) - Traffic Types Publisher is capable of running
+    - contacts (array[Contact Lite]) - Contacts linked to this publisher account
+    - manager (Manager Full)
 
 ## Publisher Owned (Publisher Full)
-+ payment_info (object)
-    + payee: Jane Doe (string) - Payee's Name
-    + payto: Personal (string) - Whether Payee is a Company or a Personal account (allowed values are Personal and Company)
-    + method: Check (string) - Payment method, must be one of "Check", "Paypal" or "ACH"
-    + ach_bank: Bank One (string, optional) - If method is "ACH" this must be sent, ACH Bank's name
-    + ach_account: 123456 (string, optional) - If method is "ACH" this must be sent, ACH Bank's account number
-    + ach_routing: 019292 (string, optional) - If method is "ACH" this must be sent, ACH Bank's routing number
-    + ach_type: Checking (string, optional) - If method is "ACH" this must be sent, ACH Account type. Either "Savings" or "Checking"
-    + paypal_address: test@test.com (string, optional) - If method is "Paypal" this must be sent, Paypal email address that should receive payment
+- payment_info (object)
+    - payee: Jane Doe (string) - Payee's Name
+    - payto: Personal (string) - Whether Payee is a Company or a Personal account (allowed values are Personal and Company)
+    - method: Check, Paypal, ACH (enum) - Payment method, must be one of "Check", "Paypal" or "ACH"
+    - ach_bank: Bank One (string, optional) - If method is "ACH" this must be sent, ACH Bank's name
+    - ach_account: 123456 (string, optional) - If method is "ACH" this must be sent, ACH Bank's account number
+    - ach_routing: 019292 (string, optional) - If method is "ACH" this must be sent, ACH Bank's routing number
+    - ach_type: Checking, Savings (enum, optional) - If method is "ACH" this must be sent, ACH Account type. Either "Savings" or "Checking"
+    - paypal_address: test@test.com (string, optional) - If method is "Paypal" this must be sent, Paypal email address that should receive payment
 
 ## Manager Base (object)
-+ id: 1 (number) - Manager's Id
-+ email: test@test.com (string) - Manager's Email address
-+ fax: `123-555-1234` (string) - Manager's Fax number
-+ first_name: Jane (string) - Manager's first name
-+ last_name: Manager (string) - Manager's last name
-+ messaging (object) - Object of different messaging accounts to contact Manager
-    + aim: jane123 (string) - AIM name
-    + linkedin: jane123 (string) - LinkedIn name
-    + twitter: @jane123 (string) - Twitter handle
-    + skype: jane123 (string) - Skype name
-+ mobile: `123-555-3030` (string) - Manager's mobile phone number
-+ phone: `123-555-3232` (string) - Manager's phone number
+- id: 1 (number) - Manager's Id
+- email: test@test.com (string) - Manager's Email address
+- fax: `123-555-1234` (string) - Manager's Fax number
+- first_name: Jane (string) - Manager's first name
+- last_name: Manager (string) - Manager's last name
+- messaging (object) - Object of different messaging accounts to contact Manager
+    - aim: jane123 (string) - AIM name
+    - linkedin: jane123 (string) - LinkedIn name
+    - twitter: @jane123 (string) - Twitter handle
+    - skype: jane123 (string) - Skype name
+- mobile: `123-555-3030` (string) - Manager's mobile phone number
+- phone: `123-555-3232` (string) - Manager's phone number
 
 ## Manager Full (Manager Base)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/publishers/10000/manager (string)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/publishers/10000/manager?publisher_id=10000 (string)
 
 ## Transaction Base (object)
-+ `_embedded` (object)
-    + campaign (Campaign Minimal)
-    + country (Country Full)
-+ id: L1 (string) - Transaction Id
-+ browser: Firefox (string) - Name of the browser from user's user-agent
-+ created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the transaction was created
-+ creative: 1 (number) - Id of the creative used in the transaction
-+ `device_type`: Desktop (string) - Device type from user's user-agent, example values "Desktop", "Mobile Phone", "Tablet" (not exhaustive)
-+ ip: 123.123.123.123 (string) - IP Address of user
-+ revenue: 1.50 (number) - Dollar amount of transaction (US Dollars)
-+ sid: 12345abc (string) - SubId sent by Publisher for this transaction
-+ trx: jkjkl333 (string) - TrxId sent by Publisher for this transaction
-+ type: lead (string) - Type of transaction (can be "lead", "click" or "call")
+- `_embedded` (object)
+    - campaign (Campaign Minimal)
+    - country (Country Full)
+- id: L1 (string) - Transaction Id
+- browser: Firefox (string) - Name of the browser from user's user-agent
+- created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the transaction was created
+- creative: 1 (number) - Id of the creative used in the transaction
+- `device_type`: Desktop (string) - Device type from user's user-agent, example values "Desktop", "Mobile Phone", "Tablet" (not exhaustive)
+- ip: 123.123.123.123 (string) - IP Address of user
+- revenue: 1.50 (number) - Dollar amount of transaction (US Dollars)
+- sid: 12345abc (string) - SubId sent by Publisher for this transaction
+- trx: jkjkl333 (string) - TrxId sent by Publisher for this transaction
+- type: Lead, Click, Call (enum) - Type of transaction
 
 ## Transaction Full (Transaction Base)
-+ `_links` (object)
-    + self
-        + href: https://affiliate.api.diablomedia.com/v1/transactions/L1 (string)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/transactions/L1?publisher_id=10000 (string)
 
 ## Summary Report Row (object)
-+ _embedded (object, optional)
-    + campaign (Campaign Report Base, optional) - Campaign that this row represents, will only be available if the requested data is grouped by Campaign
-    + country (Country Full, optional) - Country that this row represents, will only be available if the requested data is grouped by Country
-    + creative (Creative Report Base, optional) - Creative that this row represents, will only be available if the requested data is grouped by Creative
-+ impressions: 10 (number) - Number of impressions for this row
-+ clicks: 5 (number) - Number of clicks for this row
-+ leads: 2 (number) - Number of leads for this row
-+ calls: 1 (number) - Number of calls for this row
-+ revenue: 10.5 (number) - Amount of revenue for this row
-+ click_through: 50 (number) - Click-through percentage for this row
-+ sign_up: 40 (number) - Sign-up ratio for this row
-+ epc: 2.1 (number) - EPC for this row
-+ day: `2015-01-01` (string, optional) - Date that this row represents, will only be available if the requested data is grouped by Day
-+ sid: 123456abc (string, optional) - SubId that this row represents, will only be available if the requested data is grouped by SubId
+- _embedded (object, optional)
+    - campaign (Campaign Report Base, optional) - Campaign that this row represents, will only be available if the requested data is grouped by Campaign
+    - country (Country Full, optional) - Country that this row represents, will only be available if the requested data is grouped by Country
+    - creative (Creative Report Base, optional) - Creative that this row represents, will only be available if the requested data is grouped by Creative
+- impressions: 10 (number) - Number of impressions for this row
+- clicks: 5 (number) - Number of clicks for this row
+- leads: 2 (number) - Number of leads for this row
+- calls: 1 (number) - Number of calls for this row
+- revenue: 10.5 (number) - Amount of revenue for this row
+- click_through: 50 (number) - Click-through percentage for this row
+- sign_up: 40 (number) - Sign-up ratio for this row
+- epc: 2.1 (number) - EPC for this row
+- day: `2015-01-01` (string, optional) - Date that this row represents, will only be available if the requested data is grouped by Day
+- sid: 123456abc (string, optional) - SubId that this row represents, will only be available if the requested data is grouped by SubId
