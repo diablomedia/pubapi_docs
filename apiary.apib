@@ -31,8 +31,11 @@ This method is the most secure, because it keeps your token out of the request's
 
 If the header option isn't possible with your integration, this method is supported as well. Simply add your token as a query string parameter to the request's URL (replace xxxxxxxxxxxxxxxxxxx with your token):
 
-`https://affiliate.api.diablomedia.com/v1/campaigns?publisher_id=10000&access_token=xxxxxxxxxxxxxxxxxxx`
-  
+  `https://affiliate.api.diablomedia.com/v1/campaigns?publisher_id=10000&access_token=xxxxxxxxxxxxxxxxxxx`
+
+## Account Access
+
+Tokens are assigned to a User Account (also called a Contact), which means that a single account may have access to several Publisher accounts in our system if your Contact record is linked to more than one Publisher. Because of this, most of the API requests require that a `publisher_id` query string parameter is added to the request so that we know which Publisher account the request is for. In the example requests below we've signified if the `publisher_id` query string parameter is required or not (if it's not passed for these requests, you'll receive a `401` error response).
 
 # Group Campaigns
 
