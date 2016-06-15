@@ -3,23 +3,41 @@ HOST: https://affiliate.api.diablomedia.com
 
 # Diablo Publisher API V1
 
-API for publishers of Diablo tracking system.
+Welcome to the documentation for our Affiliate API. We've designed this API to give you, the affiliate, programmatic access to all of the functionality of our affiliate interface. In other words, we dog-food this API as it's the same API that we use in our [Affiliate User Interface](https://affiliate.diablomedia.com). Anything that we do in our Affiliate UI, you can do with this API with your own integrations.
 
-# API Root [/]
+After the "Authentication" section below, each group is broken out to the different types of "resources" that we provide through the API. Generally each resource type has a "Collection" endpoint and a "Resource" endpoint. Collections will be a list of objects of that type, and a Resource is a single object of that type. Browse to the section that you're interested in to see sample requests and responses. Usually the Collection response for a resource type will contain less properties than the Resource response would, this is done to reduce how much data is collected and returned over the wire for each request. The sample responses for each resource type indicate which properties we return for the Collection vs. Resource requests for an object.
 
-Nothing to see here?
+This is a REST JSON API, so all requests must send the `Accept: application/json` header in order for the API to respond with an expected response (the "Try Now" functionality of this documentation should do this for sample requests).
 
-## Retrieve the Entry Point [GET]
+The responses are formatted to meet the [HAL](http://stateless.co/hal_specification.html) specification but should be readable/parseable by any JSON parser.
 
-+ Response 404 (application/api-problem+json)
+If you find any inconsistencies between this documentation and the API itself, please open an issue at [Github](https://github.com/diablomedia/pubapi_docs) or contact us [directly](mailto:info@diablomedia.com). We're always open to changes/improvements that will make this API more useful to our affiliates, so please let us know how we can make it better.
 
-        {
+# Versioning
 
-        }
+This is the first release of our API, therefore we've used the "v1" tag on the URL. If we ever need to make breaking changes to the API (that would break any integration that our affiliates have already created) we'll change the URL for the api to the next major version ("v2" would be next). You may continue to use the older version of the API for as long as you'd like (we'll probably retire older versions at some point, but we'll work with you to be sure that we don't break any integrations that you've setup on older versions of the API).
+
+# Authentication
+
+You must have an API token to make requests against this API. Use our [affiliate interface](https://affiliate.diablomedia.com) to generate an API token (you can do this in the "API Access" sub-section of the "User Preferences" section). Once you have a token, you can authenticate to the API in one of two ways:
+
+## Authorization Header
+
+This method is the most secure, because it keeps your token out of the request's query string (which can end up in proxy logs). Add your token to the `Authorization Header` as demonstrated below (replace xxxxxxxxxxxxxxxxxxx with your token):
+
+  Authorization: Bearer xxxxxxxxxxxxxxxxxxx
+
+## Query String Parameter
+
+If the header option isn't possible with your integration, this method is supported as well. Simply add your token as a query string parameter to the request's URL (replace xxxxxxxxxxxxxxxxxxx with your token):
+
+  https://affiliate.api.diablomedia.com/v1/campaigns?publisher_id=10000&access_token=xxxxxxxxxxxxxxxxxxx
 
 # Group Campaigns
 
 ## Campaign Resource [/v1/campaigns/{campaign_id}{?publisher_id}]
+
+Returns a full detail for the campaign specified in the URL.
 
 + Attributes (Campaign Full)
 
@@ -39,6 +57,8 @@ Nothing to see here?
 
 ## Campaign Creatives Export [/v1/campaigns/{campaign_id}/creatives_export{?publisher_id}]
 
+This endpoint will return a ZIP file of all of this campaign's creatives.
+
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
     + campaign_id: 1 (required, number) - ID of the Campaign to export creatives for
@@ -48,6 +68,8 @@ Nothing to see here?
 + Response 200 (application/zip)
 
 ## Campaign Suppression Download [/v1/campaigns/{campaign_id}/suppression{?publisher_id}]
+
+This endpoint will redirect the request to the suppression file download location for this campaign (if applicable).
 
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
@@ -68,12 +90,26 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + category: test (optional, string) - The slug of a category (or categories separated by commas) to filter the results by
     + country: US (optional, string) - The "code" of a country (or several countries, separated by commas) to filter by
     + page: 1 (optional, number) - The page of campaigns to return
-    + payout_type: cpa (optional, string) - Filter the results by campaign payout type (available options: "cpa", "cpc", "revshare"), separate several options with a comma
+    + payout_type: cpa (optional, string) - Filter the results by campaign payout type, separate several options with a comma
+        + Members
+            + cpa
+            + cpc
+            + revshare
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
     + sort: name (optional, string) - Sort the results by this field, prepend with a dash (-) to reverse the sort direction
     + traffic_type: email (optional, string) - Filter the results by campaign traffic type slug (separate by a comma to filter by multiple traffic types)
-    + type: standard (optional, string) - Filter the results by campaign type (available options: "standard", "paypercall" or "coreg"), separate several options with a comma
-    + visibility: all (optional, string) - Filter the results by visibility (must be one of "all", "approved", "unapproved", "pending", "running")
+    + type: standard (optional, string) - Filter the results by campaign type, separate several options with a comma
+        + Members
+            + standard
+            + paypercall
+            + coreg
+    + visibility: all (optional, string) - Filter the results by visibility
+        + Members
+            + all
+            + approved
+            + unapproved
+            + pending
+            + running
 
 + Attributes
     + count: 1 (number) - Number of results in this response
@@ -99,7 +135,11 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 # Group Campaign Approvals
 
+A "Campaign Approval" is an approval request made against a specific campaign for a specific publisher account. Approval Requests are sent to our affiliate team where they can be approved or denied. Only one outstanding approval request can exist for a specific campaign/publisher combination.
+
 ## Campaign Approval Resource [/v1/campaign_approvals/{approval_id}{?publisher_id}]
+
+Use this endpoint to view existing approval requests that you've made.
 
 + Parameters
     + approval_id: 1 (required, number) - ID of the approval to fetch
@@ -149,6 +189,8 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 ### Make an Approval Request [POST]
 
+If you are not yet authorized to run a campaign (the campaign's `approval_status` is not "approved"), you can make an approval request for that campaign with this request.
+
 + Request (application/json)
     + Headers
 
@@ -168,6 +210,8 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + Attributes (Campaign Approval Full)
 
 # Group Categories
+
+We use categories to classify our campaigns and publishers to help us (and you) find the right campaigns. These categories are used to filter campaigns and can also be assigned to a publisher's "categories" property, showing that the publisher is interested in offers that span those categories.
 
 ## Category Collection [/v1/categories]
 
@@ -191,6 +235,8 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + Attributes (Category Collection)
 
 # Group Contacts
+
+A "contact" is a user account that is associated to one or many publisher accounts. Access to our system is done through a Contact, which may have access to several publisher accounts.
 
 ## Contact Resource [/v1/contacts/{contact_id}]
 
@@ -581,7 +627,10 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
     + global: false (optional, boolean) - Filter the results by their global status
     + page: 1 (optional, number) - The page of pixels to return
     + sort: id (optional, string) - Sort the results by this field, prepend with a dash (-) to reverse the sort direction
-    + type: url (optional, string) - Filter the results by pixel type (url or html)
+    + type: url (optional, string) - Filter the results by pixel type
+        + Members
+            + url
+            + html
 
 + Request
     + Headers
@@ -645,7 +694,7 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ### Update a Publisher [PATCH]
 
 + Parameters
-    + id: 10000
+    + id: 10000 (number, required) - The ID of the Publisher you are updating
 
 + Request (application/json)
     + Headers
@@ -683,18 +732,30 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 # Group Summary Report
 
+This endpoint will provide grouped summary data based on input parameters you send.  The Summary Report in the UI (including the charts) is powered by this endpoint.
+
+There are a lot of filtering capabilities for this report. Most of the columns returned can be filtered, this is particularly useful for the numeric columns (calls, clicks, leads, etc...). The parameters list for this request show some samples, but here is the full reference for the numeric filtering syntax that we support:
+
+  * `>5` - This means "greater than 5"
+  * `>=10` - This means "greater than or equal to 10"
+  * `<1000` - This means "less than 1000"
+  * `<=500` - This means "less than or equal to 500"
+  * `100><1000` - This means "between 100 and 1000 (inclusive)"
+  * `!100` - This means "not equal to 100"
+  * `=10` - This means "exactly equal to 10"
+
 ## Summary Report Endpoint [/v1/reports/summary{?campaign,calls,click_through,clicks,country,creative,end,epc,group,impressions,leads,publisher_id,revenue,sid,sign_up,sort,start}]
 
 + Parameters
-    + campaign: 1 (number) - Filter report data by Campaign id
-    + calls: >=0 (string) - Filter report data by number of Calls (can use <, > and = to specify ranges)
-    + click_through: >0 (string) - Filter report data by Click Through range (can use <, > and = to specify ranges)
-    + clicks: >=1 (string) - Filter report data by number of Clicks (can use <, > and = to specify ranges)
-    + country: US (string) - Filter report data by Country (2 digit ISO code)
-    + creative: 1 (number) - Filter report data by Creative id
+    + campaign: 1 (number, optional) - Filter report data by Campaign id
+    + calls: >=0 (string, optional) - Filter report data by number of Calls (can use <, > and = to specify ranges)
+    + click_through: >0 (string, optional) - Filter report data by Click Through range (can use <, > and = to specify ranges)
+    + clicks: >=1 (string, optional) - Filter report data by number of Clicks (can use <, > and = to specify ranges)
+    + country: US (string, optional) - Filter report data by Country (2 digit ISO code)
+    + creative: 1 (number, optional) - Filter report data by Creative id
     + end: `2015-01-31` (string, required) - End date of the date range to get summary data for
-    + epc: <10 (string) - Filter report data by EPC range (can use <, > and = to specify ranges)
-    + group: campaign (enum[string]) - Which dimension to group the results by
+    + epc: <10 (string, optional) - Filter report data by EPC range (can use <, > and = to specify ranges)
+    + group: campaign (enum[string], optional) - Which dimension to group the results by
         + Members
             + campaign
             + day
@@ -702,13 +763,13 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
             + creative
             + country
             + publisher
-    + impressions: >0 (string) - Filter report data by number of Impressions (can use <, > and = to specify ranges)
-    + leads: >=1 (string) - Filter report data by Leads (can use >, < and = to specify ranges)
+    + impressions: >0 (string, optional) - Filter report data by number of Impressions (can use <, > and = to specify ranges)
+    + leads: >=1 (string, optional) - Filter report data by Leads (can use >, < and = to specify ranges)
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
-    + revenue: <1000 (string) - Filter report data by Revenue range (can use <, > and = to specify ranges)
-    + sid: 123* (string) - Filter report data by SubId (can use asterisk as wildcard)
-    + sign_up: `0-100` (string) - Filter report data by Sign Up Ratio range (specify as a range of values to include)
-    + sort: `-revenue` (string) - Which column to sort results by, can prefix with a dash (-) to reverse sort direction
+    + revenue: <1000 (string, optional) - Filter report data by Revenue range (can use <, > and = to specify ranges)
+    + sid: 123* (string, optional) - Filter report data by SubId (can use asterisk as wildcard)
+    + sign_up: `0><100` (string, optional) - Filter report data by Sign Up Ratio range (specify as a range of values to include)
+    + sort: `-revenue` (string, optional) - Which column to sort results by, can prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start date of the date range to get summary data for
 
 ### Fetch Summary Data [GET]
@@ -746,15 +807,15 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 ## Summary Report Export [/v1/reports/summary/export{?campaign,calls,click_through,clicks,country,creative,end,epc,group,impressions,leads,publisher_id,revenue,sid,sign_up,sort,start}]
 
 + Parameters
-    + campaign: 1 (number) - Filter report data by Campaign id
-    + calls: >=0 (string) - Filter report data by number of Calls (can use <, > and = to specify ranges)
-    + click_through: >0 (string) - Filter report data by Click Through range (can use <, > and = to specify ranges)
-    + clicks: >=1 (string) - Filter report data by number of Clicks (can use <, > and = to specify ranges)
-    + country: US (string) - Filter report data by Country (2 digit ISO code)
-    + creative: 1 (number) - Filter report data by Creative id
+    + campaign: 1 (number, optional) - Filter report data by Campaign id
+    + calls: >=0 (string, optional) - Filter report data by number of Calls (can use <, > and = to specify ranges)
+    + click_through: >0 (string, optional) - Filter report data by Click Through range (can use <, > and = to specify ranges)
+    + clicks: >=1 (string, optional) - Filter report data by number of Clicks (can use <, > and = to specify ranges)
+    + country: US (string, optional) - Filter report data by Country (2 digit ISO code)
+    + creative: 1 (number, optional) - Filter report data by Creative id
     + end: `2015-01-31` (string, required) - End date of the date range to get summary data for
-    + epc: <10 (string) - Filter report data by EPC range (can use <, > and = to specify ranges)
-    + group: campaign (enum[string]) - Which dimension to group the results by
+    + epc: <10 (string, optional) - Filter report data by EPC range (can use <, > and = to specify ranges)
+    + group: campaign (enum[string], optional) - Which dimension to group the results by
         + Members
             + campaign
             + day
@@ -762,13 +823,13 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
             + creative
             + country
             + publisher
-    + impressions: >0 (string) - Filter report data by number of Impressions (can use <, > and = to specify ranges)
-    + leads: >=1 (string) - Filter report data by Leads (can use >, < and = to specify ranges)
+    + impressions: >0 (string, optional) - Filter report data by number of Impressions (can use <, > and = to specify ranges)
+    + leads: >=1 (string, optional) - Filter report data by Leads (can use >, < and = to specify ranges)
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
-    + revenue: <1000 (string) - Filter report data by Revenue range (can use <, > and = to specify ranges)
-    + sid: 123* (string) - Filter report data by SubId (can use asterisk as wildcard)
-    + sign_up: `0-100` (string) - Filter report data by Sign Up Ratio range (specify as a range of values to include)
-    + sort: `-revenue` (string) - Which column to sort results by, can prefix with a dash (-) to reverse sort direction
+    + revenue: <1000 (string, optional) - Filter report data by Revenue range (can use <, > and = to specify ranges)
+    + sid: 123* (string, optional) - Filter report data by SubId (can use asterisk as wildcard)
+    + sign_up: `0><100` (string, optional) - Filter report data by Sign Up Ratio range (specify as a range of values to include)
+    + sort: `-revenue` (string, optional) - Which column to sort results by, can prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start date of the date range to get summary data for
 
 ### Export Summary Data [GET]
@@ -813,17 +874,21 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 + Parameters
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
-    + campaign: 1 (number) - Filter transactions by a campaign
-    + country: US (string) - Filter transactions by a country
-    + creative: 1 (number) - Filter transactions by a creative id
-    + end: `2015-01-31` (string) - End Date of date range, in YYYY-MM-DD format
-    + ip: 123.123.* (string) - Filter transactions by an IP address (can use asterisk as a wildcard character)
-    + page: 1 (number) - Page number of transactions to fetch
-    + sid: 123abc* (string) - Filter transactions by SubId (can use asterisk as a wildcard character)
-    + sort: created (string) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
-    + start: `2015-01-01` (string) - Start Date of date range, in YYYY-MM-DD format
-    + trx: kdkd* (string) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
-    + type: lead (string) - Filter transactions by their type, can be "lead", "click" or "call"
+    + campaign: 1 (number, optional) - Filter transactions by a campaign
+    + country: US (string, optional) - Filter transactions by a country
+    + creative: 1 (number, optional) - Filter transactions by a creative id
+    + end: `2015-01-31` (string, required) - End Date of date range, in YYYY-MM-DD format
+    + ip: 123.123.* (string, optional) - Filter transactions by an IP address (can use asterisk as a wildcard character)
+    + page: 1 (number, optional) - Page number of transactions to fetch
+    + sid: 123abc* (string, optional) - Filter transactions by SubId (can use asterisk as a wildcard character)
+    + sort: created (string, optional) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
+    + start: `2015-01-01` (string, required) - Start Date of date range, in YYYY-MM-DD format
+    + trx: kdkd* (string, optional) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
+    + type: lead (string, optional) - Filter transactions by their type, if not specified, all types are returned
+        + Members
+            + lead
+            + click
+            + call
 
 + Attributes
     + count: 1 (number) - Number of results in this response
@@ -853,17 +918,21 @@ Paged listing of all campaigns available, can be filtered by various campaign pr
 
 + Parameters
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
-    + campaign: 1 (number) - Filter transactions by a campaign
-    + country: US (string) - Filter transactions by a country
-    + creative: 1 (number) - Filter transactions by a creative id
-    + end: `2015-01-31` (string) - End Date of date range, in YYYY-MM-DD format
-    + ip: 123.123.* (string) - Filter transactions by an IP address (can use asterisk as a wildcard character)
-    + page: 1 (number) - Page number of transactions to fetch
-    + sid: 123abc* (string) - Filter transactions by SubId (can use asterisk as a wildcard character)
-    + sort: created (string) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
-    + start: `2015-01-01` (string) - Start Date of date range, in YYYY-MM-DD format
-    + trx: kdkd* (string) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
-    + type: lead (string) - Filter transactions by their type, can be "lead", "click" or "call"
+    + campaign: 1 (number, optional) - Filter transactions by a campaign
+    + country: US (string, optional) - Filter transactions by a country
+    + creative: 1 (number, optional) - Filter transactions by a creative id
+    + end: `2015-01-31` (string, required) - End Date of date range, in YYYY-MM-DD format
+    + ip: 123.123.* (string, optional) - Filter transactions by an IP address (can use asterisk as a wildcard character)
+    + page: 1 (number, optional) - Page number of transactions to fetch
+    + sid: 123abc* (string, optional) - Filter transactions by SubId (can use asterisk as a wildcard character)
+    + sort: created (string, optional) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
+    + start: `2015-01-01` (string, required) - Start Date of date range, in YYYY-MM-DD format
+    + trx: kdkd* (string, optional) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
+    + type: lead (string, optional) - Filter transactions by their type, if not specified, all types are returned
+        + Members
+            + lead
+            + click
+            + call
 
 ### Export Transactions [GET]
 
