@@ -224,7 +224,12 @@ If you are not yet authorized to run a campaign (the campaign's `approval_status
     + Body
 
             {
-                "campaign_id": 2
+                "campaign_id": 2,
+                "traffic_types": ["Display", "Email"],
+                "test_budget": 100,
+                "start_date": "2018-08-13",
+                "request_detail": "Target Audience, Placement, etc",
+                "success_criteria": "EPC, Conversion Rate, etc"
             }
 
 + Response 200 (application/hal+json)
@@ -1115,7 +1120,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
         - href: https://affiliate.api.diablomedia.com/v1/campaigns/1?publisher_id=10000 (string)
 
 ## Campaign Lite Base (Campaign Base)
-- `approval_status`: approved (string) - Approval Status of campaign ['approved','pending','denied','not_approved']
+- `approval_status`: approved (string) - Approval Status of campaign ['approved','pending','not_approved']
 - categories: [] (array[Category Base]) - Array of category objects
 - created: `2010-11-05T16:01:54+00:00` (string) - An ISO8601 date when the campaign was created
 - description (string) - Campaign description, may contain HTML
@@ -1227,8 +1232,14 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 - id: 1 (number) - Approval Id
 - created: `2010-11-05T16:01:54+00:00` (string) - ISO8602 date when the approval was created
 - status: pending (string) - Approval's status (Approved, Pending, Declined, Deleted)
+- response_date: `2018-08-13T12:02:00+00:00` (string) - ISO8602 date when the approval/denial was recorded
 
 ## Campaign Approval Lite (Campaign Approval Minimal)
+- response_comment: This is a comment (string) - A comment regarding the approval/denial
+- traffic_types: [Display, Email] (array) - The traffic types requested to be ran
+- test_budget: 100 (string) - The requested number of test leads or clicks
+- request_detail: Target Audience, Placement, etc (string) - Details of how the campaign will be ran
+- success_criteria: EPC, Conversion Rate, etc (string) - How the test will be judged to be successful
 
 ## Campaign Approval Full (Campaign Approval Minimal)
 - `_embedded` (object)
