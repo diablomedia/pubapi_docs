@@ -556,7 +556,7 @@ To mark a message as read, you need to perform a PATCH request against the messa
 + Attributes (Phone Number Full)
 
 + Parameters
-    + number_id: 1 (required, number) - ID of the Phone Number to fetch
+    + number_id: RE1234 (required, string) - ID of the Phone Number to fetch
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
 
 ### View a Phone Number Detail [GET]
@@ -1190,7 +1190,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 - `_links` (object)
     - self
         - href: https://affiliate.api.diablomedia.com/v1/phone_numbers/1?publisher_id=10000 (string)
-- id: 1 (number) - Phone Number's Id
+- id: RE1234 (string) - Phone Number's Id
 - number: `+15551234567` (string) - The phone number itself
 
 ## Phone Number Minimal (Phone Number Base)
