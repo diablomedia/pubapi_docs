@@ -229,7 +229,8 @@ If you are not yet authorized to run a campaign (the campaign's `approval_status
                 "start_date": "2016-01-01",
                 "test_budget": "100",
                 "request_detail": "Target Audience, Placement, etc",
-                "success_criteria": "EPC, Conversion Rate, etc"
+                "success_criteria": "EPC, Conversion Rate, etc",
+		"custom_creative": "Yes"
             }
 
 + Response 200 (application/hal+json)
@@ -1241,6 +1242,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 - test_budget: 100 (string) - The requested number of test leads or clicks
 - request_detail: Target Audience, Placement, etc (string) - Details of how the campaign will be ran
 - success_criteria: EPC, Conversion Rate, etc (string) - How the test will be judged to be successful
+- custom_creative: Yes or No (string) - Does publisher want to use a custom creative?
 
 ## Campaign Approval Full (Campaign Approval Minimal)
 - `_embedded` (object)
