@@ -1387,11 +1387,11 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 - payment_info (object)
     - payee: Jane Doe (string) - Payee's Name
     - payto: Personal (string) - Whether Payee is a Company or a Personal account (allowed values are Personal and Company)
-    - method: Check, Paypal, ACH (enum) - Payment method, must be one of "Check", "Paypal" or "ACH"
-    - ach_bank: Bank One (string, optional) - If method is "ACH" this must be sent, ACH Bank's name
-    - ach_account: 123456 (string, optional) - If method is "ACH" this must be sent, ACH Bank's account number
-    - ach_routing: 019292 (string, optional) - If method is "ACH" this must be sent, ACH Bank's routing number
-    - ach_type: Checking, Savings (enum, optional) - If method is "ACH" this must be sent, ACH Account type. Either "Savings" or "Checking"
+    - method: Check, Paypal, ACH, Wire (enum) - Payment method, must be one of "Check", "Paypal", "ACH" or "Wire"
+    - ach_bank: Bank One (string, optional) - If method is "ACH" or "Wire" this must be sent, Bank's name
+    - ach_account: 123456 (string, optional) - If method is "ACH" or "Wire" this must be sent, Bank's account number
+    - ach_routing: 019292 (string, optional) - If method is "ACH" or "Wire" this must be sent, Bank's routing number
+    - ach_type: Checking, Savings (enum, optional) - If method is "ACH" or "Wire" this must be sent, Account type. Either "Savings" or "Checking"
     - paypal_address: test@test.com (string, optional) - If method is "Paypal" this must be sent, Paypal email address that should receive payment
 
 ## Manager Base (object)
