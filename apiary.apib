@@ -550,6 +550,36 @@ To mark a message as read, you need to perform a PATCH request against the messa
 + Response 200 (application/hal+json)
     + Attributes (Message Collection)
 
+# Group Payment Methods
+
+## Payment Method Collection [/v1/payment_methods{?publisher_id}]
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+
++ Attributes
+    + count: 1 (number) - Number of results in this response
+    + total: 2 (number) - Total number of results available
+    + `_links` (object)
+        + self (object)
+            + href: https://affiliate.api.diablomedia.com/v1/payment_methods?page=1&publisher_id=10000 (string)
+            + first: https://affiliate.api.diablomedia.com/v1/payment_methods?publisher_id=10000 (string)
+            + last: https://affiliate.api.diablomedia.com/v1/payment_methods?page=2&publisher_id=10000 (string)
+            + next: https://affiliate.api.diablomedia.com/v1/payment_methods?page=2&publisher_id=10000 (string)
+    + `_embedded` (object)
+        + payment_methods (array[Payment Method Full])
+
+### List Payment Methods [GET]
+
++ Request
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer pleaseinsertyourtokenhere
+
++ Response 200 (application/hal+json)
+    + Attributes (Category Collection)
+
 # Group Phone Numbers
 
 ## Phone Number Resource [/v1/phone_numbers/{number_id}{?publisher_id}]
@@ -1186,6 +1216,13 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 - html (string) The HTML body of the creative (HTML, Banner and Email types only)
 - image (string) URL to the creative's banner image (Banner type only)
 - text (string) Text version of the creative (Email type only)
+
+## Payment Method Full (object)
+- `_links` (object)
+    - self
+        - href: https://affiliate.api.diablomedia.com/v1/payment_methods/1?publisher_id=10000 (string)
+- id: 1 (number) - Payment Method's Id
+- name: `ACH` (string) - The payment method
 
 ## Phone Number Base (object)
 - `_links` (object)
