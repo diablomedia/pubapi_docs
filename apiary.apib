@@ -99,6 +99,27 @@ This endpoint will redirect the request to the suppression file download locatio
 
             Location: https://test.com/text.csv
 
+## Campaign Optizmo ACCESS [/v1/campaigns/{campaign_id}/optizmoaccess{?publisher_id}]
+
+This endpoint will redirect the request to Optizmo's ACCESS page (if available). Optizmo is a third party company providing email suppression list management tools.
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+    + campaign_id: 1 (required, number) - ID of the Campaign to download the suppression file for
+
+### Go to Optizmo ACCESS Page [GET]
+
++ Request
+    + Headers
+
+            Authorization: Bearer pleaseinsertyourtokenhere
+
++ Response 302
+    + Headers
+
+            Location: https://app.optizmo.com/access/campaigns?mak=m-abcd-g99-1234abc5de6fg7hi8jk9lmn00op
+
+
 ## Campaigns Collection [/v1/campaigns{?category,country,page,payout_type,publisher_id,sort,traffic_type,type,visibility}]
 
 Paged listing of all campaigns available, can be filtered by various campaign properties.
@@ -1178,6 +1199,8 @@ There are a lot of filtering capabilities for this report. Most of the columns r
         - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/creatives_export?publisher_id=10000 (string)
     - suppression
         - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/suppression?publisher_id=10000 (string)
+    - optizmoaccess
+        - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/optizmoaccess?publisher_id=10000 (string) ~ If available
 - coreg (object, optional) - If campaign is CoReg or HostAndPost type, this will contain posting fields and instructions
     - fields (array)
     - additional_instructions (string)
