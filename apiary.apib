@@ -1073,7 +1073,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 + Response 200 (application/hal+json)
     + Attributes (Transaction Resource)
 
-## Transaction Collection [/v1/transactions{?campaign,country,creative,end,ip,page,publisher_id,sid,sort,start,trx,type}]
+## Transaction Collection [/v1/transactions{?campaign,country,creative,end,ip,page,publisher_id,sid,sort,start,status,trx,type}]
 
 + Parameters
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
@@ -1087,6 +1087,11 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + sort: created (string, optional) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start Date of date range, in YYYY-MM-DD format
     + trx: kdkd* (string, optional) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
+    + status: active (enum[string], optional) - Filter transactions by their status, if not specified, "active" is implied
+        + Members
+            + active
+            + returned
+            + all
     + type: lead (enum[string], optional) - Filter transactions by their type, if not specified, all types are returned
         + Members
             + lead
@@ -1118,7 +1123,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 + Response 200 (application/hal+json)
     + Attributes (Transaction Collection)
 
-## Transaction Export [/v1/transactions/export{?campaign,country,creative,end,ip,page,publisher_id,sid,sort,start,trx,type}]
+## Transaction Export [/v1/transactions/export{?campaign,country,creative,end,ip,page,publisher_id,sid,sort,start,status,trx,type}]
 
 + Parameters
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
@@ -1132,6 +1137,11 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + sort: created (string, optional) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start Date of date range, in YYYY-MM-DD format
     + trx: kdkd* (string, optional) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
+    + status: active (enum[string], optional) - Filter transactions by their status, if not specified, "active" is implied
+        + Members
+            + active
+            + returned
+            + all
     + type: lead (enum[string], optional) - Filter transactions by their type, if not specified, all types are returned
         + Members
             + lead
@@ -1491,6 +1501,10 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 - sid: 12345abc (string) - SubId sent by Publisher for this transaction
 - trx: jkjkl333 (string) - TrxId sent by Publisher for this transaction
 - type: Lead, Click, Call (enum) - Type of transaction
+- status: active, returned (enum) - Status of transaction
+- return_reason: Client Returned (string) - Reason the transaction was returned (will be empty if transaction is active)
+- return_date: `2011-11-06T11:30:30+00:00` (string) - ISO8602 date when the transaction was returned
+- email: test@test.com (string) - Email address of lead if from Coreg or Host & Post campaign
 
 ## Transaction Full (Transaction Base)
 - `_links` (object)
