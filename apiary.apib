@@ -79,15 +79,15 @@ This endpoint will return a ZIP file of all of this campaign's creatives.
 
 + Response 200 (application/zip)
 
-## Campaign Suppression Download [/v1/campaigns/{campaign_id}/suppression{?publisher_id}]
+## Campaign Email Suppression Download [/v1/campaigns/{campaign_id}/suppression{?publisher_id}]
 
-This endpoint will redirect the request to the suppression file download location for this campaign (if applicable), and log the download in our system.
+This endpoint will redirect the request to the email suppression file download location for this campaign (if applicable), and log the download in our system.
 
 + Parameters
     + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
     + campaign_id: 1 (required, number) - ID of the Campaign to download the suppression file for
 
-### Download Suppression File [GET]
+### Download Email Suppression File [GET]
 
 + Request
     + Headers
@@ -118,6 +118,27 @@ This endpoint will redirect the request to Optizmo's ACCESS page (if available).
     + Headers
 
             Location: https://app.optizmo.com/access/campaigns?mak=m-abcd-g99-1234abc5de6fg7hi8jk9lmn00op
+
+
+## Campaign Phone/SMS Suppression Download [/v1/campaigns/{campaign_id}/phonesuppression{?publisher_id}]
+
+This endpoint will redirect the request to the phone suppression file download location for this campaign (if applicable), and log the download in our system.
+
++ Parameters
+    + publisher_id: 10000 (required, number) - ID of the Publisher account you are working as
+    + campaign_id: 1 (required, number) - ID of the Campaign to download the suppression file for
+
+### Download Phone/SMS Suppression File [GET]
+
++ Request
+    + Headers
+
+            Authorization: Bearer pleaseinsertyourtokenhere
+
++ Response 302
+    + Headers
+
+            Location: https://test.com/text.csv
 
 
 ## Campaigns Collection [/v1/campaigns{?category,country,page,payout_type,publisher_id,sort,traffic_type,type,visibility}]
@@ -1201,6 +1222,8 @@ There are a lot of filtering capabilities for this report. Most of the columns r
         - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/suppression?publisher_id=10000 (string, nullable)
     - `optizmoaccess`
         - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/optizmoaccess?publisher_id=10000 (string, nullable)
+    - `phonesuppression`
+        - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/phonesuppression?publisher_id=10000 (string, nullable)
 
 ## Campaign Full (Campaign Lite Base)
 - `_embedded` (object)
@@ -1215,6 +1238,8 @@ There are a lot of filtering capabilities for this report. Most of the columns r
         - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/suppression?publisher_id=10000 (string, nullable)
     - `optizmoaccess`
         - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/optizmoaccess?publisher_id=10000 (string, nullable)
+    - `phonesuppression`
+        - href: https://affiliate.api.diablomedia.com/v1/campaigns/1/phonesuppression?publisher_id=10000 (string, nullable)
 - coreg (object, optional) - If campaign is CoReg or HostAndPost type, this will contain posting fields and instructions
     - fields (array)
     - additional_instructions (string)
