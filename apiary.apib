@@ -946,7 +946,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
   * `!100` - This means "not equal to 100"
   * `=10` - This means "exactly equal to 10"
 
-## Summary Report Endpoint [/v1/reports/summary{?campaign,calls,click_through,clicks,country,creative,end,epc,group,impressions,leads,publisher_id,revenue,sid,sign_up,sort,start}]
+## Summary Report Endpoint [/v1/reports/summary{?campaign,calls,click_through,clicks,country,creative,end,epc,group,impressions,leads,publisher_id,revenue,sid,sid2,sid3,sid4,sign_up,sort,start}]
 
 + Parameters
     + campaign: 1 (number, optional) - Filter report data by Campaign id
@@ -962,6 +962,9 @@ There are a lot of filtering capabilities for this report. Most of the columns r
             + campaign
             + day
             + sid
+            + sid2
+            + sid3
+            + sid4
             + creative
             + country
             + publisher
@@ -970,6 +973,9 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
     + revenue: <1000 (string, optional) - Filter report data by Revenue range (can use <, > and = to specify ranges)
     + sid: 123* (string, optional) - Filter report data by SubId (can use asterisk as wildcard)
+    + sid2: 123* (string, optional) - Filter report data by SubId 2 (can use asterisk as wildcard)
+    + sid3: 123* (string, optional) - Filter report data by SubId 3 (can use asterisk as wildcard)
+    + sid4: 123* (string, optional) - Filter report data by SubId 4 (can use asterisk as wildcard)
     + sign_up: `0><100` (string, optional) - Filter report data by Sign Up Ratio range (specify as a range of values to include)
     + sort: `-revenue` (string, optional) - Which column to sort results by, can prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start date of the date range to get summary data for
@@ -1007,7 +1013,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
             + export
                 + href: https://affiliate.api.diablomedia.com/v1/reports/summary/export?publisher_id=10000 (string) - Link to export this report as CSV data
 
-## Summary Report Export [/v1/reports/summary/export{?campaign,calls,click_through,clicks,country,creative,end,epc,group,impressions,leads,publisher_id,revenue,sid,sign_up,sort,start}]
+## Summary Report Export [/v1/reports/summary/export{?campaign,calls,click_through,clicks,country,creative,end,epc,group,impressions,leads,publisher_id,revenue,sid,sid3,sid3,sid4,sign_up,sort,start}]
 
 + Parameters
     + campaign: 1 (number, optional) - Filter report data by Campaign id
@@ -1023,6 +1029,9 @@ There are a lot of filtering capabilities for this report. Most of the columns r
             + campaign
             + day
             + sid
+            + sid2
+            + sid3
+            + sid4
             + creative
             + country
             + publisher
@@ -1031,6 +1040,9 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
     + revenue: <1000 (string, optional) - Filter report data by Revenue range (can use <, > and = to specify ranges)
     + sid: 123* (string, optional) - Filter report data by SubId (can use asterisk as wildcard)
+    + sid2: 123* (string, optional) - Filter report data by SubId 2 (can use asterisk as wildcard)
+    + sid3: 123* (string, optional) - Filter report data by SubId 3 (can use asterisk as wildcard)
+    + sid4: 123* (string, optional) - Filter report data by SubId 4 (can use asterisk as wildcard)
     + sign_up: `0><100` (string, optional) - Filter report data by Sign Up Ratio range (specify as a range of values to include)
     + sort: `-revenue` (string, optional) - Which column to sort results by, can prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start date of the date range to get summary data for
@@ -1094,7 +1106,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 + Response 200 (application/hal+json)
     + Attributes (Transaction Resource)
 
-## Transaction Collection [/v1/transactions{?campaign,country,creative,end,ip,page,publisher_id,sid,sort,start,status,trx,type}]
+## Transaction Collection [/v1/transactions{?campaign,country,creative,end,ip,page,publisher_id,sid,sid2,sid3,sid4,sort,start,status,trx,type}]
 
 + Parameters
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
@@ -1105,6 +1117,9 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + ip: 123.123.* (string, optional) - Filter transactions by an IP address (can use asterisk as a wildcard character)
     + page: 1 (number, optional) - Page number of transactions to fetch
     + sid: 123abc* (string, optional) - Filter transactions by SubId (can use asterisk as a wildcard character)
+    + sid2: 123abc* (string, optional) - Filter transactions by SubId 2 (can use asterisk as a wildcard character)
+    + sid3: 123abc* (string, optional) - Filter transactions by SubId 3 (can use asterisk as a wildcard character)
+    + sid4: 123abc* (string, optional) - Filter transactions by SubId 4 (can use asterisk as a wildcard character)
     + sort: created (string, optional) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start Date of date range, in YYYY-MM-DD format
     + trx: kdkd* (string, optional) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
@@ -1144,7 +1159,7 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 + Response 200 (application/hal+json)
     + Attributes (Transaction Collection)
 
-## Transaction Export [/v1/transactions/export{?campaign,country,creative,end,ip,page,publisher_id,sid,sort,start,status,trx,type}]
+## Transaction Export [/v1/transactions/export{?campaign,country,creative,end,ip,page,publisher_id,sid,sid2,sid3,sid4,sort,start,status,trx,type}]
 
 + Parameters
     + publisher_id: 10000 (number,required) - ID of the Publisher account you are working as
@@ -1155,6 +1170,9 @@ There are a lot of filtering capabilities for this report. Most of the columns r
     + ip: 123.123.* (string, optional) - Filter transactions by an IP address (can use asterisk as a wildcard character)
     + page: 1 (number, optional) - Page number of transactions to fetch
     + sid: 123abc* (string, optional) - Filter transactions by SubId (can use asterisk as a wildcard character)
+    + sid2: 123abc* (string, optional) - Filter transactions by SubId 2 (can use asterisk as a wildcard character)
+    + sid3: 123abc* (string, optional) - Filter transactions by SubId 3 (can use asterisk as a wildcard character)
+    + sid4: 123abc* (string, optional) - Filter transactions by SubId 4 (can use asterisk as a wildcard character)
     + sort: created (string, optional) - The column to sort transcations by, prefix with a dash (-) to reverse sort direction
     + start: `2015-01-01` (string, required) - Start Date of date range, in YYYY-MM-DD format
     + trx: kdkd* (string, optional) - Filter transactions by Trx Id (can use asterisk as a wildcard character)
@@ -1524,6 +1542,9 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 - ip: 123.123.123.123 (string) - IP Address of user
 - revenue: 1.50 (number) - Dollar amount of transaction (US Dollars)
 - sid: 12345abc (string) - SubId sent by Publisher for this transaction
+- sid2: 12345abc (string) - SubId 2 sent by Publisher for this transaction
+- sid3: 12345abc (string) - SubId 3 sent by Publisher for this transaction
+- sid4: 12345abc (string) - SubId 4 sent by Publisher for this transaction
 - trx: jkjkl333 (string) - TrxId sent by Publisher for this transaction
 - type: Lead, Click, Call (enum) - Type of transaction
 - status: active, returned (enum) - Status of transaction
@@ -1551,3 +1572,6 @@ There are a lot of filtering capabilities for this report. Most of the columns r
 - epc: 2.1 (number) - EPC for this row
 - day: `2015-01-01` (string, optional) - Date that this row represents, will only be available if the requested data is grouped by Day
 - sid: 123456abc (string, optional) - SubId that this row represents, will only be available if the requested data is grouped by SubId
+- sid2: 123456abc (string, optional) - SubId 2 that this row represents, will only be available if the requested data is grouped by SubId 2
+- sid3: 123456abc (string, optional) - SubId 3 that this row represents, will only be available if the requested data is grouped by SubId 3
+- sid4: 123456abc (string, optional) - SubId 4 that this row represents, will only be available if the requested data is grouped by SubId 4
